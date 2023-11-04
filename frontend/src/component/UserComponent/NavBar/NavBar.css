@@ -1,0 +1,39 @@
+.loginbtn {
+    background: linear-gradient(to left, #0073e6 50%, #005CB8 50%) right;
+    background-size: 200%;
+  }
+  
+  .postbtn {
+    background: linear-gradient(to left, #1C4980 50%, #163A66 50%) right;
+    background-size: 200%;
+  }
+  
+  .iconChange:hover img {
+    transform: translateX(-180%);
+  }
+  
+  
+  .link-underline {
+    padding-bottom: 5px;
+    border-bottom-width: 0;
+    background-image: linear-gradient(transparent, transparent), linear-gradient(#fff, #fff);
+    background-size: 0 3px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size .5s ease-in-out;
+  }
+  
+  .link-underline-normal {
+    background-image: linear-gradient(transparent, transparent), linear-gradient(rgb(14 116 144),rgb(55 65 81))
+  }
+  
+  :is(.dark .dark\:link-underline-dark) {
+    background-image: linear-gradient(transparent, transparent), linear-gradient(rgb(254 202 202),rgb(255, 255, 255))
+  }
+  
+  .link-underline:hover {
+    background-size: 100% 3px;
+    background-position: 0 100%
+  }
+  
+  
