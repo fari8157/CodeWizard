@@ -1,0 +1,36 @@
+.header-container {
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+  }
+  
+  .animation-complete {
+    opacity: 1;
+  }
+  
+  .header-content.slide-in-left {
+    animation: slideFromLeft 1s ease forwards;
+  }
+  
+  .header-image.slide-in-right {
+    animation: slideFromRight 1s ease forwards;
+  }
+  
+  @keyframes slideFromLeft {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes slideFromRight {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+  

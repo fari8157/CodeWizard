@@ -1,47 +1,85 @@
-import React, { useState } from "react";
+import React, { useState  } from "react";
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
+import { Link} from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
+import userAxios from '../../../Axiox/UserAxiox';
 
 const Signup = () => {
+  const navigate=useNavigate()
   const [loading, setLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [errorFields, setErrorFields] = useState([]);
   const [isPassShow, setPassShow] = useState(false);
+  const [errorFields, setErrorFields] = useState([]);
 
   const [formData, setFormData] = useState({
-    fullname: "",
-    mobile: "",
+    fullName: "",
+    phoneNumber: "",
     email: "",
-    username: "",
+    userName: "",
     password: "",
     rePassword: ""
   });
 
   const handleChangeForm = (e) => {
-    setIsError(false);
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
   };
 
+  const isEmailValid = (email) => {
+   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const registerHandle = async (event) => {
     event.preventDefault();
 
+    if (
+      !formData.fullName.trim() ||
+      !formData.email.trim() ||
+      !formData.password.trim() ||
+      !formData.rePassword.trim()
+    ) {
+      toast.error('All fields are required');
+      return;
+    }
+
     if (formData.password !== formData.rePassword) {
-      // Handle password mismatch
+      toast.error('Passwords do not match');
+      return;
+    }
+
+    if (!isEmailValid(formData.email)) {
+      toast.error('Invalid email format');
       return;
     }
 
     setLoading(true);
 
     try {
-      // Perform registration
-      // ...
+      const response = await userAxios.post('/register', formData);
 
-      setLoading(false);
+      if (response.data.error) {
+        toast.error(response.data.message);
+      } else {
+        Swal.fire({
+          title: 'Success',
+          text: response.data.message,
+          icon: 'success',
+        }).then(() => {
+          navigate('/login');
+        });
+      }
     } catch (error) {
-      // Handle registration error
-      // ...
+      console.error(error);
+      toast.error(error.response.data.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -53,10 +91,11 @@ const Signup = () => {
     return errorFields.includes(field) ? "bg-red-200 placeholder:text-red-900" : "";
   };
 
+
   return (
     <section className="bg-gray-50 dark:bg-gray-900 min-h-screen flex items-center justify-center py-5">
       <div className="max-w-screen-xl w-full flex items-center flex-col md:flex-row">
-        {/* Left Side with Image (Visible on Medium and Larger Screens) */}
+      <ToastContainer />
         <div className="w-full md:w-1/2 p-4 hidden md:block">
           <div className="rounded-lg shadow-sm p-10">
             <img
@@ -72,14 +111,15 @@ const Signup = () => {
           <h2 className="font-bold text-2xl md:text-3xl text-[#002D74] dark:text-blue-400">Student Registration</h2>
           <div className="mt-2 text-sm py-1 text-[#002D74] dark:text-blue-400">
             <span className="mr-2 font-semibold text-[#1f3e71] dark:text-blue-400">Register as Teacher?</span>
-            <a href="/vendor/signup" className="underline font-bold">click here</a>
+            <a href="" className="underline font-bold">click here</a>
           </div>
-          <form className="flex flex-col gap-3">
+          <form className="flex flex-col gap-3" onSubmit={registerHandle}>
             <div className="flex flex-col gap-3">
               <input
                 className={`p-3 rounded-lg border ${fieldBgColor("fullname")} dark:bg-gray-900`}
                 type="text"
-                name="fullname"
+                name="fullName"
+                value={formData.fullName}
                 placeholder={`${fieldBgColor("fullname") ? "Invalid Fullname" : "Fullname"} `}
                 onChange={handleChangeForm}
                 required
@@ -87,7 +127,8 @@ const Signup = () => {
               <input
                 className={`p-3 rounded-lg border ${fieldBgColor("mobile")}  dark:bg-gray-900`}
                 type="text"
-                name="mobile"
+                name="phoneNumber"
+                value={formData.phoneNumber}
                 placeholder={`${fieldBgColor("mobile") ? "Invalid Mobile" : "Mobile"} `}
                 onChange={handleChangeForm}
                 required
@@ -96,6 +137,7 @@ const Signup = () => {
                 className={`p-3 rounded-lg border ${fieldBgColor("email")} dark:bg-gray-900`}
                 type="email"
                 name="email"
+                value={formData.email}
                 placeholder={`${fieldBgColor("email") ? "Invalid Email" : "Email"} `}
                 onChange={handleChangeForm}
                 required
@@ -103,17 +145,19 @@ const Signup = () => {
               <input
                 className={`p-3 rounded-lg border ${fieldBgColor("username")} dark:bg-gray-900`}
                 type="text"
-                name="username"
+                name="userName"
+                value={formData.userName}
                 placeholder={`${fieldBgColor("username") ? "Invalid Username" : "Username"} `}
                 onChange={handleChangeForm}
                 required
               />
             </div>
-            <div className="relative p-3 rounded-lg border dark:bg-gray-900">
+            <div className="relative p-3 rounded-lg border dark-bg-gray-900">
               <input
-              className=' dark:bg-gray-900'
+                className=' dark:bg-gray-900 border-none'
                 type={isPassShow ? "text" : "password"}
                 name="password"
+                value={formData.password}
                 placeholder={`${fieldBgColor("password") ? "Invalid Password" : "Password"}  `}
                 onChange={handleChangeForm}
                 required
@@ -132,9 +176,10 @@ const Signup = () => {
             </div>
             <div className="relative p-3 rounded-lg border dark-bg-gray-900">
               <input
-               className=' dark:bg-gray-900'
+                className=' dark:bg-gray-900'
                 type={isPassShow ? "text" : "password"}
                 name="rePassword"
+                value={formData.rePassword}
                 placeholder={`${fieldBgColor("rePassword") ? "Invalid ReEnter Password" : "ReEnter Password"}  `}
                 onChange={handleChangeForm}
                 required
@@ -151,7 +196,6 @@ const Signup = () => {
                 />
               )}
             </div>
-          
             <button className="bg-[#002D74] mt-3 rounded-lg text-white py-3 hover:scale-105 duration-300 dark:bg-blue-400">
               Register
             </button>
@@ -159,11 +203,13 @@ const Signup = () => {
           <div className="mt-6 items-center text-gray-400">
             <hr className="border-gray-400" />
           </div>
-          <div className="mt-3 text-sm flex flex-col md:flex-row justify-between items-center text-[#002D74] dark-text-blue-400">
+          <div className="mt-3 text-sm flex flex-col md:flex-row justify-between items-center text-[#2a2a2b] dark-text-blue-400">
             <p>Already have an account?</p>
-            <button className="py-3 px-6 bg-white border rounded-lg hover:scale-110 duration-300   dark:bg-gray-900">
-              Login
-            </button>
+            <Link to="/login">
+              <button className="py-3 px-6 bg-white border rounded-lg hover:scale-110 duration-300 dark:bg-gray-900">
+                Login
+              </button>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,14 +1,9 @@
 import React from 'react'
-import Navbar from './component/UserComponent/NavBar/Nav'
 import 'tailwindcss/tailwind.css';
 import './App.css'
-import Navbar2 from './component/UserComponent/NavBar/Nav2';
-
-import Signup from './component/UserComponent/Signup/Signup';
-import Login from './component/UserComponent/Login/Login';
-import TeacherLogin from './component/TeacherComponents/TeacherLogin';
-import TeacherSignup from './component/TeacherComponents/TeacherSignup/TeacherSignup';
-import SampleLogin from './component/TeacherComponents/TeacherLogin/SampleLogin';
+import { BrowserRouter,Routes,Route } from 'react-router-dom';
+import UserRoutes from './Routes/UserRoutes';
+import AdminRoutes from './Routes/AdminRoutes';
 
 
 
@@ -18,15 +13,15 @@ function App() {
 
   return (
     <>
-    {/* <Navbar/> */}
-    <Navbar2/>
-    <Signup/>
-    {/* <Login/> */}
-    {/* <TeacherLogin/> */}
-    {/* <TeacherSignup/> */}
-    
-    
-       
+    <BrowserRouter>
+     <Routes>
+      <Route path = '/*' element ={<UserRoutes/>}/>
+      <Route path = '/admin*' element ={<AdminRoutes/>}/>
+     </Routes>
+    </BrowserRouter> 
+    {/* <Nav/>
+    {/* <Nav2/>
+     <Table/> */}
     </>
   )
 }

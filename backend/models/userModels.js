@@ -13,9 +13,14 @@ const userSchema = mongoose.Schema(
         required:true,
         unique:true,
      },
+     userName:{
+      type:String,
+      required:true,
+     },
      password:{
         type:String,
-        required:true,
+        default:"",
+        
 
      },
      isAdmin:{
@@ -28,7 +33,11 @@ const userSchema = mongoose.Schema(
      },
      phoneNumber:{
         type:Number,
-        required:true,
+        default:" ",
+     },
+     isGoogle:{
+       type:Boolean,
+        default:false
      },
      pic: {
         type: String,

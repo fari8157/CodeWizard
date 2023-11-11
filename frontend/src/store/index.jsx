@@ -1,10 +1,21 @@
 import { configureStore } from "@reduxjs/toolkit";
-import themeSlice from "./them_slice";
+import {themeReducer} from "./them_slice";
+import { Clientreducer } from "./UserAuth";
+import {persistStore,persistReducer} from "redux-persist"
+import storage from "redux-persist/lib/storage";
 
-const store =configureStore({
+const persistConfig={
+    key:'theme',
+    storage
+}
+
+const persistThemeSlice=persistReducer(persistConfig,themeReducer)
+const persistClientReducer=persistReducer(persistConfig,Clientreducer)
+ export const store =configureStore({
     reducer:{
-        theme:themeSlice.reducer
+        theme:persistThemeSlice,
+        Client:persistClientReducer,
     }
 })
 
-export default store
+export const persistor=persistStore(store)
