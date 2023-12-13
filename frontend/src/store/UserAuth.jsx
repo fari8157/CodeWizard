@@ -14,14 +14,14 @@ export const ClientAuth = createSlice  ({
             state.email = action.payload.email;
             state.userName = action.payload.username;
             state. role =action.payload.role
-            state. isAdmin=action.payload. isAdmin
+            state. isAdmin=action.payload.isAdmin
 
           },          
         clientLogout(state,action){
             state.Token =null,
              state.email = null,
             state.userName = null,
-            state. role =false
+            state. role =false,
             state.isAdmin=null
         }
        

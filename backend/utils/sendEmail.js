@@ -33,7 +33,34 @@ async function sendOTP(email, otp) {
     }
   }
 
+  async function sendTeacherConfirmaion (email,fullName,content){ 
+    try {
+      const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+          user: 'salmanulfarisc13@gmail.com',
+          pass: 'jzbiiuvgblokcard',
+        },
+        tls: {
+    rejectUnauthorized: false
+        }
+      });
+      const mailOptions = {
+        from: 'salmanulfarisc13@gmail.com',
+        to: email,
+        subject: 'Teacher Confirmation',
+        text: ` Hi ${fullName}  : ${content}`
+      };
+      const info = await transporter.sendMail(mailOptions);
+    } catch (error) {
+      
+    }
+  }
+
   module.exports ={
-    sendOTP
+    sendOTP,
+    sendTeacherConfirmaion
   }
   

@@ -1,4 +1,4 @@
-.category-card {
+/* .category-card {
     position: relative;
     width: 200px;
     height: 250px;
@@ -21,12 +21,23 @@
   }
   
   /* Create the animation for staggered entrance */
-  @keyframes cardEntrance {
+  /* @keyframes cardEntrance {
     0% {
       transform: translateX(100%);
     }
     100% {
       transform: translateX(0);
     }
-  }
-  
+  } */
+
+  /* CategoryCard.css */
+
+.fade-in {
+  opacity: 0;
+}
+
+.fade-in.active {
+  opacity: 1;
+}
+
+   

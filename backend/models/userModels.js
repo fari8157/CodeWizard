@@ -40,11 +40,13 @@ const userSchema = mongoose.Schema(
         default:false
      },
      pic: {
-        type: String,
-        required: true,
-        default:
-          "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
-      },
+      type: Object,
+      required: true,
+      default: {
+          url: "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
+      }
+  },
+  
       created: {
         type: Date,
         default: Date.now(),

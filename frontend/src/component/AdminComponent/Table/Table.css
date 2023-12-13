@@ -1,0 +1,25 @@
+/* Add or modify these styles in your global CSS or stylesheet */
+.flex-column-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .pagination-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .pagination-page {
+    margin: 0.5rem;
+    padding: 0.25rem;
+    cursor: pointer;
+  }
+  
+  .pagination-arrow {
+    margin: 0.5rem;
+    padding: 0.25rem;
+    cursor: pointer;
+  }
+  

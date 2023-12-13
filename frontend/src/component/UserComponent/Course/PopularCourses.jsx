@@ -1,88 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CourseCard from './CourseCard';
 import fullstackImage from '/banner.png';
+import userAxiosInstance from '../../../Axiox/UserAxiox';
+
 // import './Course.css'
 //  // Create a CourseCard component
 
-const popularCourses = [
-  {
-    id: 1,
-    name: 'Web Development',
-    description: 'Learn web development from scratch and become a full-stack developer. ',
-    image: fullstackImage,
-    reviews: 4.8,
-    discountPrice: 49.99,
-    actualPrice: 79.99,
-  },
-  {
-    id: 1,
-    name: 'Web Development',
-    description: 'Learn web development from scratch and become a full-stack developer. ',
-    image: fullstackImage,
-    reviews: 4.8,
-    discountPrice: 49.99,
-    actualPrice: 79.99,
-  },
-  {
-    id: 1,
-    name: 'Web Development',
-    description: 'Learn web development from scratch and become a full-stack developer. ',
-    image: fullstackImage,
-    reviews: 4.8,
-    discountPrice: 49.99,
-    actualPrice: 79.99,
-  },
-  {
-    id: 1,
-    name: 'Web Development',
-    description: 'Learn web development from scratch and become a full-stack developer. ',
-    image: fullstackImage,
-    reviews: 4.8,
-    discountPrice: 49.99,
-    actualPrice: 79.99,
-  }, {
-    id: 1,
-    name: 'Web Development',
-    description: 'Learn web development from scratch and become a full-stack developer. ',
-    image: fullstackImage,
-    reviews: 4.8,
-    discountPrice: 49.99,
-    actualPrice: 79.99,
-  }, {
-    id: 1,
-    name: 'Web Development',
-    description: 'Learn web development from scratch and become a full-stack developer. ',
-    image: fullstackImage,
-    reviews: 4.8,
-    discountPrice: 49.99,
-    actualPrice: 79.99,
-  }, {
-    id: 1,
-    name: 'Web Development',
-    description: 'Learn web development from scratch and become a full-stack developer. ',
-    image: fullstackImage,
-    reviews: 4.8,
-    discountPrice: 49.99,
-    actualPrice: 79.99,
-  }, {
-    id: 1,
-    name: 'Web Development',
-    description: 'Learn web development from scratch and become a full-stack developer. ',
-    image: fullstackImage,
-    reviews: 4.8,
-    discountPrice: 49.99,
-    actualPrice: 79.99,
-  },
-  // Add more course objects as needed with descriptions
-];
+
 
 const PopularCourses = () => {
+  const [courses,setCourses]=useState([])
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await userAxiosInstance.get('/courses');
+       
+        setCourses(response.data.courses)
+       
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+        // Handle error (e.g., show an error message)
+      }
+    };
+  
+    fetchData(); // Call the async function to fetch data
+  }, [setCourses]);
+  
     return (
       <div className="text-center mt-16 md:px-7 px-4">
         <h2 className="text-3xl mb-4 font-bold uppercase  text-blue-950">Popular Courses</h2>
         <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 mx-auto">
-          {popularCourses.map((course) => (
-            <div key={course.id}>
+          {courses.map((course) => (
+            <div key={course._id}>
               <CourseCard course={course} />
             </div>
           ))}

@@ -190,7 +190,7 @@ function Navbar() {
         )}
       </div>
     </nav>
-    <nav  className=" flex justify-between dark:bg-gray-900 bg-gray-100 p-4 shadow-lg z-50 border-b w-full h-14 "></nav>
+    <nav  className=" flex justify-between dark:bg-gray-900 bg-gray-100 p-4 shadow-lg z-50 border-b w-full h-16 "></nav>
     </>
   
   );

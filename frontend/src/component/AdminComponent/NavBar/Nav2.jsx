@@ -1,18 +1,22 @@
 import React, { useState } from "react";
 import "./Nav2.css";
 import { Spin as Hamburger } from "hamburger-react";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { clientLogout } from "../../../store/UserAuth";
 
 
 
 
 const Navbar = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
- 
-  const handlelogin = () => {
-  
+  const  dispatch=useDispatch()
+  // const navigate=useNavigate()
+  const logoutHandler = () => {
+    dispatch(clientLogout());
+    // navigate('/login')
   };
+
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
@@ -35,12 +39,21 @@ const Navbar = () => {
 
           </span>
           </Link>
+          <Link to='/admin/teachers'>
           <span className="nav-link">
             TEACHERS
           </span>
+          </Link>
+          <Link to='/admin/teacherApprovel'>
           <span className="nav-link">
             TEACHER REQUEST
           </span>
+          </Link>
+          <Link to='/admin/categories'>
+          <span className="nav-link">
+            CATEGORIES
+          </span>
+          </Link>
           <span className="nav-link">
             ALL COURSE
           </span>
@@ -85,15 +98,15 @@ const Navbar = () => {
         )}
         <div
           className="hidden signinandsignup md:flex space-x-4"
-          onClick={handlelogin}
+         
         >
-          <a href="#" className="logbutton">
+          <span  className="logbutton"  onClick={ logoutHandler}>
             <span></span>
             <span></span>
             <span></span>
             <span></span>
             LOGOUT
-          </a>
+          </span>
         </div>
       </div>
     </nav>

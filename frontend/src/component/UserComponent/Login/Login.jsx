@@ -11,7 +11,7 @@ import AnimationWindow from '../Animated';
 import GoogleLogin from "../../Google/GoogleLogin"
 import { useDispatch, useSelector } from 'react-redux';
 import { clientLogin } from '../../../store/UserAuth';
-
+import Spinner from '../../Spinner/Spinner'
 
 const Login = () => {
   const dispatch = useDispatch()
@@ -40,60 +40,113 @@ const Login = () => {
     setPassShow(!isPassShow);
   };
 
- const loginHandle = async (event) => {
+//  const loginHandle = async (event) => {
+//   event.preventDefault();
+//   setLoading(true);
+
+//   try {
+//     console.log('Form Data:', formData);
+   
+//     const response = await userAxios.post('/login', formData);
+//     console.log('Response:', response);
+
+//     if (response.data.error) {
+//       toast.error(response.data.message);
+//     } else {
+//       Swal.fire({
+//         title: 'Success',
+//         text: response.data.message,
+//         icon: 'success',
+//         showConfirmButton: false,
+//         timer: 1000,
+      
+//       }).then(() => {
+//         if (response.data.isAdmin) {
+//           dispatch(
+//             clientLogin({
+//               token: response.data.token,
+//               email: response.data.email,
+//               userName: response.data.userName,
+//               role: response.data.role,
+//               isAdmin: response.data.isAdmin
+//             })
+//           );
+//           setLoading(false)
+//           navigate('/admin/dashbord');
+//           return
+//         } else {
+//           dispatch(
+//             clientLogin({
+//               token: response.data.token,
+//               email: response.data.email,
+//               userName: response.data.userName,
+//               role: response.data.role
+//             })
+//           );
+//           console.log(client);
+//           navigate('/');
+//         }
+
+//       });
+//       response.data.role == 'admin' ? navigate('/admin/dashbord') : navigate('/')
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     toast.error(error.response.data.message);
+//   }
+// };
+const loginHandle = async (event) => {
   event.preventDefault();
   setLoading(true);
 
   try {
-    console.log('Form Data:', formData);
-
     const response = await userAxios.post('/login', formData);
-    console.log('Response:', response);
 
     if (response.data.error) {
       toast.error(response.data.message);
+      setLoading(false);
     } else {
-      Swal.fire({
-        title: 'Success',
-        text: response.data.message,
-        icon: 'success',
-      }).then(() => {
-        if (response.data.isAdmin) {
-          dispatch(
-            clientLogin({
-              token: response.data.token,
-              email: response.data.email,
-              userName: response.data.userName,
-              role: response.data.role,
-              isAdmin: response.data.isAdmin
-            })
-          );
-          navigate('/admin/dashbord');
-        } else {
-          dispatch(
-            clientLogin({
-              token: response.data.token,
-              email: response.data.email,
-              userName: response.data.userName,
-              role: response.data.role
-            })
-          );
-          console.log(client);
-          navigate('/');
-        }
-      });
+      if (response.data.isAdmin) {
+        dispatch(
+          clientLogin({
+            token: response.data.token,
+            email: response.data.email,
+            userName: response.data.userName,
+            role: response.data.role,
+            isAdmin: response.data.isAdmin
+          })
+        );
+        setLoading(false);
+        navigate('/admin/dashbord');
+      } else {
+        dispatch(
+          clientLogin({
+            token: response.data.token,
+            email: response.data.email,
+            userName: response.data.userName,
+            role: response.data.role
+          })
+        );
+        setLoading(false);
+        navigate('/');
+      }
     }
   } catch (error) {
     console.error(error);
     toast.error(error.response.data.message);
+    setLoading(false);
   }
 };
 
 
 
 
+
   return (
+  <>
+  {loading&&<Spinner/>}
     <section className="bg-gray-50 dark:bg-gray-900 min-h-screen flex items-center justify-center ">
+     
       <div className="max-w-6xl flex flex-col md:flex-row">
         <div className="w-full md:w-1/2 p-8 md:p-16 hidden md:block">
           <ToastContainer />
@@ -147,9 +200,11 @@ const Login = () => {
 
           <div className="mt-2 text-lg py-5 dark:text-blue-400 text-[#002D74] text-center">
             <span className="mr-2 font-semibold dark:text-blue-400 text-[#1f3e71]">Login as Teacher ?</span>
-            <a href="" className="underline font-bold">
+            <Link to={'/teacher/login'}>
+            <span className="underline font-bold">
               click here
-            </a>
+            </span>
+            </Link>
           </div>
 
           <div className="mt-5 grid grid-cols-3 items-center text-gray-400">
@@ -181,6 +236,7 @@ const Login = () => {
       </div>
       {/* {showAnimation && <AnimationWindow />} */}
     </section>
+    </>
   );
 };
 

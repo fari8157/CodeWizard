@@ -5,11 +5,24 @@ function UserProctiveRoutes({ children }) {
   const { Token,role } = useSelector((state) => state.Client);
   const location = useLocation();
 
-  return Token &&role ?  (
-    <Navigate to="/" state={{ from: location.pathname }} replace />
-  ) : (
-    children
-  );
+//   return Token &&role=='student' ?  (
+//     <Navigate to="/" state={{ from: location.pathname }} replace />
+//   ) : Token &&role=='admin' ?  (
+//     <Navigate to="/admin/dashbord" state={{ from: location.pathname }} replace />
+//     ) : (
+//       // <Navigate to="/" state={{ from: location.pathname }} replace />
+//       children
+//   );
+// }
+return Token && role === 'student' ? (
+  <Navigate to="/" state={{ from: location.pathname }} replace />
+) : Token && role === 'admin' ? (
+  <Navigate to="/admin/dashbord" state={{ from: location.pathname }} replace />
+) : Token && role === 'teacher' ? (
+  <Navigate to="/teacher/Dashboard" state={{ from: location.pathname }} replace />
+) : (
+  children
+);
 }
 
 export default UserProctiveRoutes;

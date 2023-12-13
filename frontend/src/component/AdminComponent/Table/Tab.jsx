@@ -1,20 +1,22 @@
 import React, { useEffect,useState } from 'react';
 import adminAxios from '../../../Axiox/AdminAxiox'
 import { useSelector } from 'react-redux';
+import ReactPaginate from 'react-paginate';
 import Swal from 'sweetalert2';
+import './Table.css'
 
 const Dashboard = () => {
 
-  const [searchInput, setSearch] = useState('');
+  const [searchInput, setSearchInput] = useState('');
   const [users, setUsers] = useState([]);
-   const [filterdata, setFilterData] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
    const [itemsPerPage,setItemsPerPage] = useState(5)
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(0);
     const{Token,role}=useSelector((state)=>state.Client)
   
 
   const handlePageChange = (selectedPage) => {
-    setCurrentPage(selectedPage);
+    setCurrentPage(selectedPage.selected);
   };
  useEffect(()=>{
   adminAxios.get("/students" ,{
@@ -26,47 +28,77 @@ const Dashboard = () => {
   }).then((response)=>{
     console.log(response.data);
     setUsers(response.data.students)
+    setFilteredUsers(response.data.students);
   })
- },[setUsers])
-  
-  
-  const handleSearch = (value) => {
-    // Implement your search logic here
-    console.log(value);
-  };
+ },[setUsers,setFilteredUsers])
 
-  
 
-  const acessChange = (email,isAccess) => {
-    console.log(isAccess);
-    adminAxios.put("/updateAccess" ,{email,isAccess},
-    {
-      headers:{
-        'Content-Type':'application/json',
-        'Authorization':Token,  
-        'userRole':role,
-      }
-    }).then((response)=>{
-      console.log(response.data);
-      setUsers((prevUsers) =>
-      prevUsers.map((user) =>
-        user.email === response.data.email ? { ...user,isAccess: response.data.isAccess } : user
-      )
+ const acessChange = (email,isAccess) => {
+  console.log(isAccess);
+  adminAxios.put("/updateAccess" ,{email,isAccess},
+  {
+    headers:{
+      'Content-Type':'application/json',
+      'Authorization':Token,  
+      'userRole':role,
+    }
+  }).then((response)=>{
+    console.log(response.data);
+    setFilteredUsers((prevUsers) =>
+    prevUsers.map((user) =>
+      user.email === response.data.email ? { ...user,isAccess: response.data.isAccess } : user
+    )
+  );
+ 
+  })
+ 
+};
+
+
+
+
+
+ const handleSearch = (value) => {
+  console.log(value);
+  setSearchInput(value);
+
+  // Perform the search logic
+  const filteredData = users.filter((user) => {
+    const fullName = (user.fullName || '').toLowerCase();
+    const userName = (user.userName || '').toLowerCase();
+    const email = (user.email || '').toLowerCase();
+  
+    return (
+      fullName.includes(value.toLowerCase()) ||
+      userName.includes(value.toLowerCase()) ||
+      email.includes(value.toLowerCase())
     );
-   
-    })
-   
-  };
+  });
+  
 
+  setFilteredUsers(filteredData);
+};
+const handleItemsPerPageChange = (e) => {
+  const selectedItemsPerPage = parseInt(e.target.value, 10);
+  setItemsPerPage(selectedItemsPerPage);
+  setCurrentPage(0);
+};
+
+const offset = currentPage * itemsPerPage;
+  const paginatedData = filteredUsers.slice(offset, offset + itemsPerPage);
+
+  
   return (
     <div className="bg-opacity-50 bg-white text-black p-4">
       <div className="max-w-screen-xl mx-auto">
         <div className="mb-4">
           <div className="flex justify-end items-center mb-4">
+            
             <input
               type="text"
               placeholder="Search..."
               className="p-2 border rounded-md w-full md:w-64"
+              value={searchInput}
               onChange={(e) => handleSearch(e.target.value)}
             />
           </div>
@@ -101,13 +133,13 @@ const Dashboard = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-            {users.map((user, index) => (
+            {paginatedData.map((user, index) => (
               <tr key={user._id}>
                 <td className="px-6 py-4 whitespace-nowrap text-center">
-                  <div className="text-sm text-gray-900">{index + 1}</div>
+                  <div className="text-sm text-gray-900">{index + 1 + currentPage * itemsPerPage}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-center">
-                  <img src={user.pic} alt="User" className="h-8 w-8 rounded-full" />
+                  <img src={user.pic.url} alt="User" className="h-8 w-8 rounded-full" />
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-center">
                   <div className="text-sm text-gray-900">{user.fullName}</div>
@@ -142,6 +174,34 @@ const Dashboard = () => {
              ))}
             </tbody>
           </table>
+          <div className=''>
+          <div className='flex justify-end mt-7 '>
+              <label className="mr-2 bg-orange-400 rounded-full px-6 p-2 text-white">Items per Page<span></span></label>
+              <select onChange={handleItemsPerPageChange} value={itemsPerPage} className='bg-orange-400   rounded-md  text-white'>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+              </select>
+            </div>
+   
+
+          </div>
+       <div className='flex-column-center'>
+  <ReactPaginate
+    pageCount={Math.ceil(filteredUsers.length / itemsPerPage)}
+    pageRangeDisplayed={5}
+    marginPagesDisplayed={2}
+    onPageChange={handlePageChange}
+    containerClassName="pagination-container"
+    activeClassName="active"
+    breakLabel={'...'}
+    breakClassName={'break-me'}
+    previousLabel={<span className="pagination-arrow">&lt;</span>}
+    nextLabel={<span className="pagination-arrow">&gt;</span>}
+    pageLinkClassName='pagination-page'
+  />
+</div>
+
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 import Navbar from '../../component/UserComponent/NavBar/Nav2'
-import Otp from '../../component/Otp/Otp'
+import Otp from '../../component/UserComponent/Otp/Otp'
 
 function ForgetOtp() {
   return (

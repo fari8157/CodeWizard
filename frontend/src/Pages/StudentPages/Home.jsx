@@ -5,7 +5,7 @@ import CategoryGrid from '../../component/UserComponent/CategoryGrid'
 import PopularCourses from '../../component/UserComponent/Course/PopularCourses'
 import OurSpecialties from '../../component/UserComponent/ourSpeciality/Speciality'
 import BlogPosts from '../../component/UserComponent/Blog/BlogPosts'
-import Footer from '../../component/UserComponent/Footer/Footer'
+import Footer from '../../component/UserComponent/Footer/Footer2'
 function Home() {
   return (
     <div>

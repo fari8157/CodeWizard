@@ -70,20 +70,21 @@
 //     }
 
 
-    import React,{useEffect, useState} from 'react';
-    import { FiEdit } from 'react-icons/fi';
-    import ChangePasswordModal from '../../Modal/ChangePassModal';
+import React,{useEffect, useRef, useState} from 'react';
+import { FiEdit } from 'react-icons/fi';
+import ChangePasswordModal from '../../Modal/ChangePassModal';
 import { useSelector } from 'react-redux';
 import userAxios from '../../../Axiox/UserAxiox';
-
+import EditDetailsModal from '../../Modal/updateDetails';
+import Swal from 'sweetalert2';
     
     const ProfileCard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen,setEditModal]=useState(false)
   const [userData,setUserData]= useState("")
-  const {Token,role}= useSelector((state)=>state.Client)
+  const {Token,role}=useSelector((state)=>state.Client)
   useEffect(() => {
-    
-    console.log(Token,role);
+   console.log(Token,role);
     if (Token && role) {
       userAxios.get('/profileDetail', {
         headers: {
@@ -93,9 +94,10 @@ import userAxios from '../../../Axiox/UserAxiox';
         }
       })
       .then((response) => {
-        // Handle the response here
-        console.log(response.data);
+        
+       
         setUserData(response.data.userData)
+       
       })
       .catch((error) => {
         console.error('Error fetching profile details:', error);
@@ -106,7 +108,13 @@ import userAxios from '../../../Axiox/UserAxiox';
   }, []);
 
 
+  const editOpenModal = () => {
+    setEditModal(true);
+  }
 
+  const editCloseModal = () => {
+    setEditModal(false);
+  }
 
 
 
@@ -118,6 +126,66 @@ import userAxios from '../../../Axiox/UserAxiox';
   const closeModal = () => {
     setIsModalOpen(false);
   }
+
+  
+    const fileInputRef = useRef(null);
+  
+    const handleImageSelect = () => {
+      fileInputRef.current.click();
+    };
+  
+    const handleFileChange = (event) => {
+      const selectedFile = event.target.files[0];
+    
+      if (selectedFile) {
+        const allowedTypes = ['image/jpeg', 'image/png'];
+        if (!allowedTypes.includes(selectedFile.type)) {
+          alert('Please select a valid image file (JPEG, PNG).');
+          return;
+        }
+        Swal.fire({
+          title: 'Updating Picture',
+          text: 'Please wait...',
+          icon: 'info',
+          allowOutsideClick: false,
+          showConfirmButton: false,
+          showCancelButton: false,
+          willOpen: () => {
+            Swal.showLoading();
+          }
+        });
+    
+        const formData = new FormData();
+        formData.append('profilePicture', selectedFile); 
+         
+        userAxios.post('/updateProfilePic',formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data', 
+            'Authorization': Token,
+            'userRole': role,
+          }
+        })
+        .then((response) => {
+          Swal.close();
+          console.log(response.data);
+          if (response.data.error) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: response.data.message || 'An error occurred during profile picture update.',
+          })}else{
+            setUserData(response.data.studentData)
+            Swal.close();
+          }
+        })
+        .catch((error) => {
+          Swal.close();
+          console.error('Error updating profile picture:', error);
+        
+        });
+      }
+    };
+    
       return (
         <>
         
@@ -127,10 +195,22 @@ import userAxios from '../../../Axiox/UserAxiox';
                 <div className="p-4 md:p-12 text-center lg:text-left">
                 <div
                       className="block lg:hidden rounded-full shadow-xl mx-auto -mt-16 h-48 w-48 bg-cover bg-center relative"
-                      style={{ backgroundImage: `url(${userData.pic})` }} >
+                      style={{ backgroundImage: `url(${userData && userData.pic.url})` }} >
                                                                            
                     <div className="absolute top-2 right-2">
-                      <FiEdit className="text-blue-500 text-2xl hover:text-blue-700" />
+                    <div>
+                        <input
+                         type="file"
+                         accept="image/*"
+                          style={{ display: 'none' }}
+                           ref={fileInputRef}
+                            onChange={handleFileChange}
+                             />
+                           < FiEdit
+                           className="text-blue-500 text-2xl hover:text-blue-700 cursor-pointer"
+                            onClick={handleImageSelect}
+                              />
+                              </div>
                     </div>
                   </div>
     
@@ -145,24 +225,27 @@ import userAxios from '../../../Axiox/UserAxiox';
                   </p>
     
                   <p className="pt-2 text-gray-600 text-xs lg:text-sm flex items-center justify-center lg:justify-start">
-                    <svg className="h-4 fill-current text-green-700 pr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                      <path d="M10 0a7.44 7.44 0 0 1 5.3 2.2 7.48 7.48 0 0 1 2.2 5.3c0 4-3.4 7.2-7.5 7.2S2.5 11.5 2.5 7.3 5.9 0 10 0zM10 18c-4.9 0-9-3.9-9-9s4.1-9 9-9 9 3.9 9 9-4.1 9-9 9z"></path>
-                      <path d="M10 4.2a4.8 4.8 0 0 0-4.8 4.8c0 2.7 2.2 4.8 4.8 4.8s4.8-2.2 4.8-4.8-2.2-4.8-4.8-4.8zm0 8.6a3.8 3.8 0 0 1-3.8-3.8 3.8 3.8 0 0 1 3.8-3.8 3.8 3.8 0 0 1 3.8 3.8 3.8 3.8 0 0 1-3.8 3.8z"></path>
-                    </svg>
+                  <svg className="h-4 fill-current text-green-700 pr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M12,2C6.48,2,2,6.48,2,12c0,5.52,4.48,10,10,10s10-4.48,10-10C22,6.48,17.52,2,12,2z M12,14c-2.67,0-5.33-1.33-8-4c0,2.67,2.67,4,8,4c5.33,0,8-1.33,8-4C17.33,12.67,14.67,14,12,14z"/>
+    </svg>
                     Username: {userData.userName}
                   </p>
                   <p className="pt-2 text-gray-600 text-xs lg:text-sm flex items-center justify-center lg:justify-start">
-                    <svg className="h-4 fill-current text-green-700 pr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                      <path d="M10 0a7.44 7.44 0 0 1 5.3 2.2 7.48 7.48 0 0 1 2.2 5.3c0 4-3.4 7.2-7.5 7.2S2.5 11.5 2.5 7.3 5.9 0 10 0zM10 18c-4.9 0-9-3.9-9-9s4.1-9 9-9 9 3.9 9 9-4.1 9-9 9z"></path>
-                      <path d="M10 4.2a4.8 4.8 0 0 0-4.8 4.8c0 2.7 2.2 4.8 4.8 4.8s4.8-2.2 4.8-4.8-2.2-4.8-4.8-4.8zm0 8.6a3.8 3.8 0 0 1-3.8-3.8 3.8 3.8 0 0 1 3.8-3.8 3.8 3.8 0 0 1 3.8 3.8 3.8 3.8 0 0 1-3.8 3.8z"></path>
-                    </svg>
+                  <svg className="h-4 fill-current text-green-700 pr-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M12,2C6.48,2,2,6.48,2,12c0,5.52,4.48,10,10,10s10-4.48,10-10C22,6.48,17.52,2,12,2z M12,14c-2.67,0-5.33-1.33-8-4c0,2.67,2.67,4,8,4c5.33,0,8-1.33,8-4C17.33,12.67,14.67,14,12,14z"/>
+    </svg>
+
+
+
+
                     Phone: {userData.phoneNumber}
                   </p>
     
                    <ChangePasswordModal isOpen={isModalOpen} onRequestClose={closeModal} /> 
+                   <EditDetailsModal isOpen={isEditModalOpen} onRequestClose={editCloseModal} userData={userData} setUserData={setUserData} />
                   <div className="pt-12 pb-8 flex justify-between">
                     <button className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded-full"  onClick={openModal}>Change password</button>
-                    <button className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded-full">Edit details</button>
+                    <button className="bg-green-700 hover:bg-green-900 text-white font-bold py-2 px-4 rounded-full"  onClick={editOpenModal}>Edit details</button>
                     
                   </div>
                   <div className='flex justify-between'>
@@ -172,14 +255,28 @@ import userAxios from '../../../Axiox/UserAxiox';
                 </div>
               </div>
               <div className="w-full lg:w-2/5">
-              <FiEdit className="text-blue-500 text-2xl hover:text-blue-700  hidden lg:block"   />
-                <img src={userData.pic} className="rounded-none lg:rounded-lg shadow-2xl hidden lg:block" alt="Profile" />
+              <div>
+                        <input
+                         type="file"
+                         accept="image/*"
+                          style={{ display: 'none' }}
+                           ref={fileInputRef}
+                            onChange={handleFileChange}
+                             />
+                           < FiEdit
+                          className="text-blue-500 text-2xl hover:text-blue-700  hidden lg:block" 
+                            onClick={handleImageSelect}
+                              />
+                              </div>
+           
+                <img src={userData && userData.pic.url} className="rounded-none lg:rounded-lg shadow-2xl hidden lg:block" alt="Profile" />
               </div>
             </div>
           </div>
         </>
       );
     }
+  
     
     export default ProfileCard;
     

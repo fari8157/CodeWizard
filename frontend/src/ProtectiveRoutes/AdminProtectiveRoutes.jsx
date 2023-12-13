@@ -6,8 +6,8 @@ function AdminProctiveRoutes({ children }) {
   const location = useLocation();
 
   return Token &&(role==='admin') ? (
-      children
-      ) : (
+    children
+    ) : (
       <Navigate to="/" state={{ from: location.pathname }} replace />
   );
 }

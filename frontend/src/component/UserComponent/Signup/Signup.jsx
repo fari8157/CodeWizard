@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
 import userAxios from '../../../Axiox/UserAxiox';
+import Spinner from "../../Spinner/Spinner";
 
 const Signup = () => {
   const navigate=useNavigate()
@@ -38,16 +39,39 @@ const Signup = () => {
 
   const registerHandle = async (event) => {
     event.preventDefault();
-
     if (
       !formData.fullName.trim() ||
+      !formData.phoneNumber.trim() ||
       !formData.email.trim() ||
+      !formData.userName.trim() ||
       !formData.password.trim() ||
       !formData.rePassword.trim()
     ) {
-      toast.error('All fields are required');
+      const missingFields = [];
+      if (!formData.fullName.trim()) {
+        missingFields.push('Full Name');
+      }
+      if (!formData.phoneNumber.trim()) {
+        missingFields.push('Phone Number');
+      }
+      if (!formData.email.trim()) {
+        missingFields.push('Email');
+      }
+      if (!formData.userName.trim()) {
+        missingFields.push('Username');
+      }
+      if (!formData.password.trim()) {
+        missingFields.push('Password');
+      }
+      if (!formData.rePassword.trim()) {
+        missingFields.push('Re-enter Password');
+      }
+    
+      const errorMessage = `The following fields are required: ${missingFields.join(', ')}`;
+      toast.error(errorMessage);
       return;
     }
+    
 
     if (formData.password !== formData.rePassword) {
       toast.error('Passwords do not match');
@@ -87,12 +111,11 @@ const Signup = () => {
     setPassShow(!isPassShow);
   };
 
-  const fieldBgColor = (field) => {
-    return errorFields.includes(field) ? "bg-red-200 placeholder:text-red-900" : "";
-  };
-
+ 
 
   return (
+    <>
+    {loading&&<Spinner/>}
     <section className="bg-gray-50 dark:bg-gray-900 min-h-screen flex items-center justify-center py-5">
       <div className="max-w-screen-xl w-full flex items-center flex-col md:flex-row">
       <ToastContainer />
@@ -110,55 +133,59 @@ const Signup = () => {
         <div className="w-full md:w-1/2 p-4">
           <h2 className="font-bold text-2xl md:text-3xl text-[#002D74] dark:text-blue-400">Student Registration</h2>
           <div className="mt-2 text-sm py-1 text-[#002D74] dark:text-blue-400">
+           
             <span className="mr-2 font-semibold text-[#1f3e71] dark:text-blue-400">Register as Teacher?</span>
-            <a href="" className="underline font-bold">click here</a>
+           
+            <Link to ="/teacher/register">
+            <span className="underline font-bold">click here</span>
+            </Link>
           </div>
           <form className="flex flex-col gap-3" onSubmit={registerHandle}>
             <div className="flex flex-col gap-3">
               <input
-                className={`p-3 rounded-lg border ${fieldBgColor("fullname")} dark:bg-gray-900`}
+                className={`p-3 rounded-lg border  dark:bg-gray-900`}
                 type="text"
                 name="fullName"
                 value={formData.fullName}
-                placeholder={`${fieldBgColor("fullname") ? "Invalid Fullname" : "Fullname"} `}
+                placeholder='fullname'
                 onChange={handleChangeForm}
                 required
               />
               <input
-                className={`p-3 rounded-lg border ${fieldBgColor("mobile")}  dark:bg-gray-900`}
+                className={`p-3 rounded-lg border   dark:bg-gray-900`}
                 type="text"
                 name="phoneNumber"
                 value={formData.phoneNumber}
-                placeholder={`${fieldBgColor("mobile") ? "Invalid Mobile" : "Mobile"} `}
+                placeholder='mobile'
                 onChange={handleChangeForm}
                 required
               />
               <input
-                className={`p-3 rounded-lg border ${fieldBgColor("email")} dark:bg-gray-900`}
+                className={`p-3 rounded-lg border  dark:bg-gray-900`}
                 type="email"
                 name="email"
                 value={formData.email}
-                placeholder={`${fieldBgColor("email") ? "Invalid Email" : "Email"} `}
+                placeholder='email'
                 onChange={handleChangeForm}
                 required
               />
               <input
-                className={`p-3 rounded-lg border ${fieldBgColor("username")} dark:bg-gray-900`}
+                className={`p-3 rounded-lg border  dark:bg-gray-900`}
                 type="text"
                 name="userName"
                 value={formData.userName}
-                placeholder={`${fieldBgColor("username") ? "Invalid Username" : "Username"} `}
+                placeholder='username'
                 onChange={handleChangeForm}
                 required
               />
             </div>
-            <div className="relative p-3 rounded-lg border dark-bg-gray-900">
+            <div className="relative ">
               <input
-                className=' dark:bg-gray-900 border-none'
+                className='p-4 rounded-xl border w-full dark:bg-gray-900'
                 type={isPassShow ? "text" : "password"}
                 name="password"
                 value={formData.password}
-                placeholder={`${fieldBgColor("password") ? "Invalid Password" : "Password"}  `}
+                placeholder='password'
                 onChange={handleChangeForm}
                 required
               />
@@ -174,13 +201,13 @@ const Signup = () => {
                 />
               )}
             </div>
-            <div className="relative p-3 rounded-lg border dark-bg-gray-900">
+            <div className="relative ">
               <input
-                className=' dark:bg-gray-900'
+                className='p-4 rounded-xl border w-full dark:bg-gray-900'
                 type={isPassShow ? "text" : "password"}
                 name="rePassword"
                 value={formData.rePassword}
-                placeholder={`${fieldBgColor("rePassword") ? "Invalid ReEnter Password" : "ReEnter Password"}  `}
+                placeholder='Re-password'
                 onChange={handleChangeForm}
                 required
               />
@@ -203,7 +230,7 @@ const Signup = () => {
           <div className="mt-6 items-center text-gray-400">
             <hr className="border-gray-400" />
           </div>
-          <div className="mt-3 text-sm flex flex-col md:flex-row justify-between items-center text-[#2a2a2b] dark-text-blue-400">
+          <div className="mt-3 text-sm flex flex-col md:flex-row justify-between items-center text-[#2a2a2b] dark:text-blue-400">
             <p>Already have an account?</p>
             <Link to="/login">
               <button className="py-3 px-6 bg-white border rounded-lg hover:scale-110 duration-300 dark:bg-gray-900">
@@ -214,6 +241,7 @@ const Signup = () => {
         </div>
       </div>
     </section>
+    </>
   );
 };
 
