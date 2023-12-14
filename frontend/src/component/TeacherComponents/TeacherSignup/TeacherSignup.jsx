@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
 import { Link } from "react-router-dom";
 import Navbar from "../../UserComponent/NavBar/Nav2";
-import teacherAxiosInstance from "../../../Axiox/TeacherAxiox";
+import {teacherAxios} from "../../../Axiox/TeacherAxiox";
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
@@ -118,7 +118,7 @@ const Signup = () => {
   
     try {
       setLoading(true);
-      const response = await teacherAxiosInstance.post('/register', teacherData, {
+      const response = await teacherAxios.post('/register', teacherData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

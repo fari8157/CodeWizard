@@ -21,102 +21,143 @@ const { imageUpload } = require('../../utils/cloudinery/upload.js')
 
 
 
- const teacherRegister= async(req,res)=>{
-    const teacherData=req.body
-    const  qualificationCertificate=req.files.qualificationCertificate
-    const  idProof =req.files.idProof
-    const certificate =await imageUpload(qualificationCertificate)
-    const teacherId=await imageUpload(idProof)
-    
-    
+const teacherRegister = async (req, res) => {
+  try {
+    const teacherData = req.body;
+    const qualificationCertificate = req.files.qualificationCertificate;
+    const idProof = req.files.idProof;
+    const certificate = await imageUpload(qualificationCertificate);
+    const teacherId = await imageUpload(idProof);
+
     const teacher = await teacherDB.getTeacherByEmail(teacherData.email);
-    
+
     if (teacher) {
-        console.log('hi');
-        return res.json({ error: true, message: 'User Already Exists' });
-      }
-      const newTeacher = await teacherDB.createTeacher(teacherData,certificate,teacherId);
-      return res.json({ error: false, message: 'Your details submitted successfully. Your request is pending. After verification, we will send your application status to your email.' });
-
-  
- }
-
- const forgetPassword = async (req, res) => {
-console.log('hi');
-  const { email } = req.body;
-  console.log(email);
-  const teacher = await teacherDB.getTeacherByEmail(email);
-  console.log(teacher);
-  
-  if (teacher) {
-    if (teacher.isTeacher) { 
-      if (teacher.isApproved) {
-        if (teacher.isAccess) { 
-          const otp = generateOTP();
-          console.log(otp);
-          await OTPDB.insertOTP(teacher._id, otp, 1);
-          
-          console.log(otp);
-          
-          await sendOTP(teacher.email, otp);
-          
-          return res.json({ error: false, message: "The OTP sent to your email is only valid for 1 minute." });
-        } else {
-          return res.json({ error: true, message: "Access denied" });
-        }
-      } else {
-        return res.json({ error: true, message: "Teacher is not approved yet" });
-      }
-    } else {
-      return res.json({ error: true, message: "This email does not belong to a teacher" });
+      console.log('hi');
+      return res.json({ error: true, message: 'User Already Exists' });
     }
-  } else {
-    return res.json({ error: true, message: 'Teacher not found' });
+
+    const newTeacher = await teacherDB.createTeacher(
+      teacherData,
+      certificate,
+      teacherId
+    );
+    
+    return res.json({
+      error: false,
+      message:
+        'Your details submitted successfully. Your request is pending. After verification, we will send your application status to your email.'
+    });
+  } catch (error) {
+    
+    console.error(error);
+    return res.status(500).json({ error: true, message: 'Internal Server Error' });
   }
 };
 
-const otpVerify=async (req,res)=>{
-  const {enteredOtp,email}=req.body
-   const teacher = await teacherDB.getTeacherByEmail(email);
-   const verify= await OTPDB.verifyOtp(teacher._id,enteredOtp)
-   console.log(verify);
-   if(verify){
-     return res.json({error:false ,message:"Sucessfully verified"})
-   }else{
-     return res.json({error:true ,message:"invalid otp"})
-   }
-   
- }
 
+const forgetPassword = async (req, res) => {
+  try {
+    console.log('hi');
+    const { email } = req.body;
+    console.log(email);
+    const teacher = await teacherDB.getTeacherByEmail(email);
+    console.log(teacher);
 
- const resedOtp = async (req, res) => {
-  const { email } = req.body;
-  console.log(email);
-  const teacher = await teacherDB.getTeacherByEmail(email);
-  if (teacher) {
-    await OTPDB.deleteAllOtps(teacher._id);
+    if (teacher) {
+      if (teacher.isTeacher) {
+        if (teacher.isApproved) {
+          if (teacher.isAccess) {
+            const otp = generateOTP();
+            console.log(otp);
+            await OTPDB.insertOTP(teacher._id, otp, 1);
 
-    if (teacher.isTeacher) { 
-      if (teacher.isApproved) { 
-        if (teacher.isAccess) { 
-          const otp = generateOTP();
-          console.log(otp);
-         await OTPDB.insertOTP(teacher._id, otp, 1);
-         console.log(otp);
-          await sendOTP(teacher.email, otp);
-          
-          return res.json({ error: false, message: "The OTP sent to your email is only valid for 1 minute." });
+            console.log(otp);
+
+            await sendOTP(teacher.email, otp);
+
+            return res.json({
+              error: false,
+              message: "The OTP sent to your email is only valid for 1 minute."
+            });
+          } else {
+            return res.json({ error: true, message: "Access denied" });
+          }
         } else {
-          return res.json({ error: true, message: "Access denied" });
+          return res.json({ error: true, message: "Teacher is not approved yet" });
         }
       } else {
-        return res.json({ error: true, message: "Teacher is not approved yet" });
+        return res.json({
+          error: true,
+          message: "This email does not belong to a teacher"
+        });
       }
     } else {
-      return res.json({ error: true, message: "This email does not belong to a teacher" });
+      return res.json({ error: true, message: 'Teacher not found' });
     }
-  } else {
-    return res.status(401).json({ error: true, message: 'Teacher not found' });
+  } catch (error) {
+  
+    console.error(error);
+    return res.status(500).json({ error: true, message: 'Internal Server Error' });
+  }
+};
+
+
+const otpVerify = async (req, res) => {
+  try {
+    const { enteredOtp, email } = req.body;
+    const teacher = await teacherDB.getTeacherByEmail(email);
+    const verify = await OTPDB.verifyOtp(teacher._id, enteredOtp);
+    console.log(verify);
+    
+    if (verify) {
+      return res.json({ error: false, message: "Successfully verified" });
+    } else {
+      return res.json({ error: true, message: "Invalid OTP" });
+    }
+  } catch (error) {
+    
+    console.error(error);
+    return res.status(500).json({ error: true, message: 'Internal Server Error' });
+  }
+};
+
+
+
+const resedOtp = async (req, res) => {
+  try {
+    const { email } = req.body;
+    console.log(email);
+    const teacher = await teacherDB.getTeacherByEmail(email);
+    
+    if (teacher) {
+      await OTPDB.deleteAllOtps(teacher._id);
+
+      if (teacher.isTeacher) {
+        if (teacher.isApproved) {
+          if (teacher.isAccess) {
+            const otp = generateOTP();
+            console.log(otp);
+            await OTPDB.insertOTP(teacher._id, otp, 1);
+            console.log(otp);
+            await sendOTP(teacher.email, otp);
+
+            return res.json({ error: false, message: "The OTP sent to your email is only valid for 1 minute." });
+          } else {
+            return res.json({ error: true, message: "Access denied" });
+          }
+        } else {
+          return res.json({ error: true, message: "Teacher is not approved yet" });
+        }
+      } else {
+        return res.json({ error: true, message: "This email does not belong to a teacher" });
+      }
+    } else {
+      return res.status(401).json({ error: true, message: 'Teacher not found' });
+    }
+  } catch (error) {
+    // Handle the error appropriately, you can log it or send an error response
+    console.error(error);
+    return res.status(500).json({ error: true, message: 'Internal Server Error' });
   }
 };
 

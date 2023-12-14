@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
 import { FcGoogle } from 'react-icons/fc';
 import { Link } from 'react-router-dom';
-import userAxios from '../../../Axiox/UserAxiox';
+import {userAxios} from '../../../Axiox/UserAxiox';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';

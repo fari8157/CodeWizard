@@ -126,6 +126,7 @@ const googleLogin = async (req, res) => {
 };
 
 const forgetPassword= async(req,res)=>{
+  try{
   const {email}= req.body
   console.log(email);
   const user = await userDB.getUserByEmail(email);
@@ -151,9 +152,14 @@ const forgetPassword= async(req,res)=>{
   }else{
     return res.status(401).json({ error: true, message: 'User not found' });
   }
+} catch (error) {
+  console.error(error);
+  return res.status(500).json({ error: true, message: "Internal server error" });
 }
+};
 
 const otpVerify=async (req,res)=>{
+  try{
  const {enteredOtp,email}=req.body
   const user = await userDB.getUserByEmail(email);
   const verify= await OTPDB.verifyOtp(user._id,enteredOtp)
@@ -164,9 +170,14 @@ const otpVerify=async (req,res)=>{
     return res.json({error:true ,message:"invalid otp"})
   }
   
+} catch (error) {
+  console.error(error);
+  return res.status(500).json({ error: true, message: "Internal server error" });
 }
+};
 
 const resedOtp= async (req,res)=>{
+  try{
   const {email}= req.body
   console.log(email);
   const user = await userDB.getUserByEmail(email);
@@ -193,7 +204,11 @@ const resedOtp= async (req,res)=>{
   }else{
     return res.json({ error: true, message: 'User not found' });
   }
+} catch (error) {
+  console.error(error);
+  return res.status(500).json({ error: true, message: "Internal server error" });
 }
+};
 
 const updatePassword = async (req, res) => {
   try {

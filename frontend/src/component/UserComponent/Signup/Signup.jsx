@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
-import userAxios from '../../../Axiox/UserAxiox';
+import {userAxios} from '../../../Axiox/UserAxiox';
 import Spinner from "../../Spinner/Spinner";
 
 const Signup = () => {

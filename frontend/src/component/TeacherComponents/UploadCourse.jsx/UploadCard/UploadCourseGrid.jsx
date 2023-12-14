@@ -89,12 +89,12 @@ const DetailCard = ({ update, setUpdate }) => {
       
       <div>
       {/* Search input */}
-      <input
+      {/* <input
         type="text"
         placeholder="Search courses..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-      />
+      /> */}
 
       {/* Display filtered/paginated courses */}
       {currentCourses.map((course) => (
@@ -108,7 +108,7 @@ const DetailCard = ({ update, setUpdate }) => {
       ))}
 
       {/* Pagination buttons */}
-      <div className="flex justify-center mt-4">
+      {/* <div className="flex justify-center mt-4">
         {Array.from({ length: Math.ceil(filteredCourses.length / itemsPerPage) }, (_, index) => (
           <button
             key={index}
@@ -120,7 +120,7 @@ const DetailCard = ({ update, setUpdate }) => {
             {index + 1}
           </button>
         ))}
-      </div>
+      </div> */}
     </div>
        
     </div>

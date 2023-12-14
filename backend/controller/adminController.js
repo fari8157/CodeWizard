@@ -3,13 +3,22 @@ const TeacherModel =require('../../backend/repository/teacherModel.js');
 const {  sendTeacherConfirmaion } = require("../utils/sendEmail.js");
 const userDB = new UserModel();
 const teacherDB= new TeacherModel()
+
+
+
 const getStudents= async(req,res)=>{
+try{
 const students=await userDB.getAllUsers()
 
 return res.json({students})
-}
+}catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: true, message: "Internal server error" });
+  }
+};
 
 const updateAccess=async(req,res)=>{
+    try{
     const{email,isAccess}=req.body
     const updateAccess=!isAccess
     console.log(updateAccess);
@@ -18,17 +27,26 @@ const updateAccess=async(req,res)=>{
     return res.json({ email: result.email, isAccess: result.isAccess });
    
     
-}
+} catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: true, message: "Internal server error" });
+  }
+};
 
 const requestedTeachers=async(req,res)=>{
-    
+    try{
     const teachers= await teacherDB.getTeacherByRequested()
     console.log(teachers);
    return res.json({teachers})
 
-}
+} catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: true, message: "Internal server error" });
+  }
+};
 
 const teacherApprovel=async(req,res)=>{
+    try{
     const{email,isApprovel }=req.body
     console.log(email,isApprovel );
     if(isApprovel){
@@ -47,13 +65,22 @@ const teacherApprovel=async(req,res)=>{
        sendTeacherConfirmaion(email,teacherDetails.fullName,content)
        return res.json({error:false,email:teacherDetails.email,message:"Application Rejected"})
     }
-}
+} catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: true, message: "Internal server error" });
+  }
+};
 
 const getTeachers= async(req,res)=>{
+    try{
     const teachers=await teacherDB.getAllTeachers()
     
     return res.json({teachers})
-    }
+    }catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: true, message: "Internal server error" });
+      }
+    };
 
 
 module.exports={

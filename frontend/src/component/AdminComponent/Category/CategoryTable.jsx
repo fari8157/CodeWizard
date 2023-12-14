@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
-import PicModal from '../Modal/PictureModal';
+import PicModal from '../../Modal/PictureModal';
+import AddCategory from './AddCategory';
 
 
 const Category = () => {
@@ -44,7 +45,7 @@ const Category = () => {
   // Additional states for modal
   const [showModal, setShowModal] = useState(false);
   const [modalImage, setModalImage] = useState('');
-
+  const [showAddModal, setaddModal] = useState(false);
   // Function to handle page change
   const handlePageChange = (selectedPage) => {
     setCurrentPage(selectedPage.selected);
@@ -61,6 +62,10 @@ const Category = () => {
     setShowModal(false);
   };
 
+  const handleNewModal = () => {
+    setaddModal(true);
+    console.log(showAddModal);
+  };
   // Function to handle search input
   const handleSearch = (value) => {
     setSearchInput(value);
@@ -89,19 +94,26 @@ const Category = () => {
   }, [categories]);
   return (
     <div className="bg-opacity-50 bg-white text-black p-4">
-      {/* Search input */}
-      <div className="max-w-screen-xl mx-auto mb-4 ">
-        <div className="flex justify-center items-center mb-4">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="p-2 border rounded-md w-full md:w-64"
-            value={searchInput}
-            onChange={(e) => handleSearch(e.target.value)}
-          />
-        </div>
-       
-      </div>
+  {/* Search input */}
+  <div className="max-w-screen-xl mx-auto mb-4 ">
+    <div className="flex justify-between items-center mb-4"> {/* Adjusted this line */}
+      <input
+        type="text"
+        placeholder="Search..."
+        className="p-2 border rounded-md w-full md:w-64"
+        value={searchInput}
+        onChange={(e) => handleSearch(e.target.value)}
+      />
+      {/* Button on the right side */}
+      <button
+        type="button"
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        onClick={handleNewModal} 
+      >
+        Add Category
+      </button>
+    </div>
+  </div>
 
       {/* Table */}
       <table className="min-w-full divide-y divide-gray-200 mx-auto">
@@ -183,6 +195,9 @@ const Category = () => {
           </div>
 
       {/* Modal */}
+      {showAddModal && (
+  <AddCategory closeModal={() => setaddModal(false)} />
+)}
       {showModal && <PicModal image={modalImage} closeModal={handleCloseModal} />}
     </div>
   );

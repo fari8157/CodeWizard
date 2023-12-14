@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import Spinner from '../../Spinner/Spinner';
-import teacherAxiosInstance from '../../../Axiox/TeacherAxiox';
+import {teacherAxios} from '../../../Axiox/TeacherAxiox';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -51,7 +51,7 @@ const TeacherLogin = () => {
     console.log(formData);
    try {
     
-    const response =await teacherAxiosInstance.post('/login',formData);
+    const response =await teacherAxios.post('/login',formData);
     if(response.data.error){
       toast.error(response.data.message)
       

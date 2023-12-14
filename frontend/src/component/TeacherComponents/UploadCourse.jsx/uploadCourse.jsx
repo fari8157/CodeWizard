@@ -130,7 +130,11 @@ const UploadClass = () => {
       formDataToSend.append('coverPhoto', formData.coverPhoto);
       formDataToSend.append('demoVideo', formData.demoVideo);
       console.log('Form Data mm:',formDataToSend);
-      const response = await teacherAxiosInstance.post('uploadCourse/videos', formDataToSend);
+      const response = await teacherAxiosInstance.post('uploadCourse/videos', formDataToSend, {
+        headers: {
+          "Content-Type": 'multipart/form-data'
+        }
+      });
       console.log(response);
   
       if (response.data.error) {
@@ -153,7 +157,7 @@ const UploadClass = () => {
     <div className="flex justify-between gap-2 pt-7 "> 
       <ToastContainer/>
       <div className="hidden md:flex"></div>
-      <div className="bg-white rounded-full md:w-1/4 w-1/2 md:ml-0 ml-6 flex items-center md:px-4 md:py-2 p-2 shadow-md border border-black  ">
+      {/* <div className="bg-white rounded-full md:w-1/4 w-1/2 md:ml-0 ml-6 flex items-center md:px-4 md:py-2 p-2 shadow-md border border-black  ">
         <input
           type="text"
           name="search"
@@ -173,7 +177,7 @@ const UploadClass = () => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17l-6-6" />
           </svg>
         </button>
-      </div>
+      </div> */}
       <div className="mr-5 whitespace-pre-wrap ">
         <span
          
