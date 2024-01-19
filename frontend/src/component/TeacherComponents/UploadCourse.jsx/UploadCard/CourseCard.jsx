@@ -17,7 +17,7 @@ const CourseCard = ({ courseData, onDelete, onShowVideos,onShowDetails  }) => {
       <img
         src={coverPhoto.url}
         alt={courseName}
-        className="w-full h-48 object-cover"
+        className="w-full h-48 object-fill"
         onClick={onShowDetails}
       />
       <div className="p-4 bg-slate-800 text-white">
@@ -36,6 +36,7 @@ const CourseCard = ({ courseData, onDelete, onShowVideos,onShowDetails  }) => {
           <button
             
             className="btn hvr-shutter-in-horizontal justify-center border-y rounded-md border-black text-black bg-red-600 px-7 py-2 hover:bg-red-800 transition duration-300 ease-in-out"
+            onClick={onDelete}
           >
             delete
           </button>

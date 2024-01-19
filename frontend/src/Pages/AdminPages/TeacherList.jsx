@@ -4,7 +4,7 @@ import TeacherManagement from '../../component/AdminComponent/TeacherList/Teache
 
 function TeacherList() {
   return (
-    <div>
+    <div className='w-screen h-screen overflow-x-hidden'>
       <Navbar/>
       <TeacherManagement/>
     </div>

@@ -7,6 +7,9 @@ import AdminProctiveRoutes from '../ProtectiveRoutes/AdminProtectiveRoutes'
 import TeacherApprove from '../Pages/AdminPages/TeacherRequest'
 import TeacherList from '../Pages/AdminPages/TeacherList'
 import CategoryList from '../Pages/AdminPages/CategoryList'
+import Transaction from '../Pages/AdminPages/Transaction'
+import StudentDetail from '../Pages/AdminPages/StudentDetail'
+import TeacherDetails from '../Pages/AdminPages/TeacherDetails'
 
 function AdminRoutes() {
     return (
@@ -49,6 +52,27 @@ function AdminRoutes() {
                 <AdminProctiveRoutes>
 
                     <CategoryList />
+                </AdminProctiveRoutes>
+            }
+            ></Route>
+             <Route path='/transaction' element={
+                <AdminProctiveRoutes>
+
+                    <Transaction />
+                </AdminProctiveRoutes>
+            }
+            ></Route>
+             <Route path='/studentDetails' element={
+                <AdminProctiveRoutes>
+
+                    <StudentDetail />
+                </AdminProctiveRoutes>
+            }
+            ></Route>
+             <Route path='/teacherDetails' element={
+                <AdminProctiveRoutes>
+
+                    <TeacherDetails />
                 </AdminProctiveRoutes>
             }
             ></Route>

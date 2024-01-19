@@ -13,7 +13,7 @@ const PicModal = ({ image, closeModal }) => {
         onClick={handleClickOutside}
       >
         <div className="bg-white p-4">
-          <img src={image} alt="ID Proof" className="h-auto w-64" />
+          <img src={image} alt="image" className="h-auto w-64" />
         </div>
       </div>
     );

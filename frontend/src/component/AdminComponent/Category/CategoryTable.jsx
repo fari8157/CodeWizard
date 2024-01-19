@@ -2,62 +2,74 @@ import React, { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import PicModal from '../../Modal/PictureModal';
 import AddCategory from './AddCategory';
+import useAxiosPrivate from '../../../hook/useAxiosPrivate';
+import EditCategoryModal from './EditCategory';
+import EditImage from './EditImage';
+
 
 
 const Category = () => {
+  const{adminAxiosInstance}= useAxiosPrivate()
   const [searchInput, setSearchInput] = useState('');
-  const [categories, setCategories] = useState([
-    {
-      _id: '1',
-      categoryName: 'Category 1',
-      imageUrl: 'https://via.placeholder.com/150',
-    },
-    {
-      _id: '2',
-      categoryName: 'Category 2',
-      imageUrl: 'https://via.placeholder.com/150',
-    },
-    {
-        _id: '1',
-        categoryName: 'Category 1',
-        imageUrl: 'https://via.placeholder.com/150',
-      },
-      {
-        _id: '2',
-        categoryName: 'Category 2',
-        imageUrl: 'https://via.placeholder.com/150',
-      },
-      {
-        _id: '1',
-        categoryName: 'Category 1',
-        imageUrl: 'https://via.placeholder.com/150',
-      },
-      {
-        _id: '2',
-        categoryName: 'Category 2',
-        imageUrl: 'https://via.placeholder.com/150',
-      },
-    // Add more dummy data objects here if needed
-  ]);
-  const [filteredCategories, setFilteredCategories] = useState([]);
+  const [categories, setCategories] = useState([])
+   const [filteredCategories, setFilteredCategories] = useState([]);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [currentPage, setCurrentPage] = useState(0);
   // Additional states for modal
   const [showModal, setShowModal] = useState(false);
   const [modalImage, setModalImage] = useState('');
   const [showAddModal, setaddModal] = useState(false);
-  // Function to handle page change
+  const[editNameModal,setNameEditModal] = useState(false)
+  const [editImageModal,setImageEditModal]=useState(false)
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [fetch,setFetch]=useState(false)
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await adminAxiosInstance.get('/categories');
+        console.log(response);
+        setCategories(response.data.categories);
+        setFetch(false)
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        
+      }
+    };
+
+    fetchCategories();
+  }, [ setCategories,fetch]);
+
+  const openModal = (category) => {
+    setSelectedCategory(category);
+    setNameEditModal(true);
+  };
+
+  // Function to close the modal
+  const closeModal = () => {
+    setSelectedCategory(null);
+    setNameEditModal(false);
+  };
+
+  const openImageModal = (category) => {
+    setSelectedCategory(category);
+    setImageEditModal(true);
+  };
+
+  const closeImageModal = () => {
+    setSelectedCategory(null);
+    setImageEditModal(false);
+  };
+
   const handlePageChange = (selectedPage) => {
     setCurrentPage(selectedPage.selected);
   };
 
-  // Function to open modal with image
   const handleOpenModal = (imageSrc) => {
     setModalImage(imageSrc);
     setShowModal(true);
   };
 
-  // Function to close modal
+
   const handleCloseModal = () => {
     setShowModal(false);
   };
@@ -66,49 +78,49 @@ const Category = () => {
     setaddModal(true);
     console.log(showAddModal);
   };
-  // Function to handle search input
+
   const handleSearch = (value) => {
     setSearchInput(value);
 
     const filteredData = categories.filter((category) =>
-      category.categoryName.toLowerCase().includes(value.toLowerCase())
+      category.name.toLowerCase().includes(value.toLowerCase())
     );
 
     setFilteredCategories(filteredData);
-    setCurrentPage(0); // Reset to first page on new search
+    setCurrentPage(0); 
   };
 
-  // Function to handle items per page change
+  
   const handleItemsPerPageChange = (e) => {
     const selectedItemsPerPage = parseInt(e.target.value, 10);
     setItemsPerPage(selectedItemsPerPage);
-    setCurrentPage(0); // Reset to first page on items per page change
+    setCurrentPage(0); 
   };
 
-  // Calculating offset for paginated data
+ 
   const offset = currentPage * itemsPerPage;
   let paginatedData = filteredCategories.slice(offset, offset + itemsPerPage);
   useEffect(() => {
-    // Initialize filteredCategories with initial data when component mounts
+   
     setFilteredCategories(categories);
   }, [categories]);
   return (
     <div className="bg-opacity-50 bg-white text-black p-4">
   {/* Search input */}
   <div className="max-w-screen-xl mx-auto mb-4 ">
-    <div className="flex justify-between items-center mb-4"> {/* Adjusted this line */}
+    <div className="flex justify-between items-center mb-4"> 
       <input
         type="text"
         placeholder="Search..."
-        className="p-2 border rounded-md w-full md:w-64"
+        className="p-2 border rounded-md  md:w-64"
         value={searchInput}
         onChange={(e) => handleSearch(e.target.value)}
       />
-      {/* Button on the right side */}
+      
       <button
         type="button"
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        onClick={handleNewModal} 
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded  sm:hover:text-blue-500 sm:py-2 sm:px-4"
+        onClick={handleNewModal}
       >
         Add Category
       </button>
@@ -116,6 +128,7 @@ const Category = () => {
   </div>
 
       {/* Table */}
+      <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200 mx-auto">
         <thead className="bg-gray-50">
           <tr>
@@ -140,30 +153,40 @@ const Category = () => {
                 <div className="text-sm text-gray-900">{index + 1 + currentPage * itemsPerPage}</div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-center">
-                <div className="text-sm text-gray-900">{category.categoryName}</div>
+                <div className="text-sm text-gray-900">{category.name}</div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-center flex items-center justify-center">
                 <img
-                  src={category.imageUrl}
+                  src={category.images&&category.images.url}
                   alt="Category"
                   className="h-8 w-8 cursor-pointer"
-                  onClick={() => handleOpenModal(category.imageUrl)}
+                  onClick={() => handleOpenModal(category.images&&category.images.url)}
                 />
               </td>
-              <td className="px-6 py-4 whitespace-nowrap text-center">
+              <td className="px-6 py-4 whitespace-nowrap text-center ">
+                <div className='flex gap-3 justify-center items-center'>
                 <button
                   type="button"
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  onClick={() => console.log('Edit clicked for:', category.categoryName)}
+                  onClick={() => openModal(category)}
                 >
-                  Edit
+                  Edit Name
                 </button>
+                <button
+                  type="button"
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={() => openImageModal(category)}
+                >
+                  Edit Image
+                </button>
+                </div>
+                
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-
+     </div>
       {/* Pagination */}
       <div className="flex justify-end mt-7">
             <label className="mr-2 bg-orange-400 rounded-full px-6 p-2 text-white">Items per Page</label>
@@ -196,8 +219,11 @@ const Category = () => {
 
       {/* Modal */}
       {showAddModal && (
-  <AddCategory closeModal={() => setaddModal(false)} />
+ <AddCategory closeModal={() => setaddModal(false)} setFetch={setFetch} />
+
 )}
+       {editNameModal&&<EditCategoryModal closeModal={closeModal} category={selectedCategory} setFetch={setFetch}/>}
+       {editImageModal&&<EditImage closeModal={closeImageModal} category={selectedCategory} setFetch={setFetch}/>}
       {showModal && <PicModal image={modalImage} closeModal={handleCloseModal} />}
     </div>
   );

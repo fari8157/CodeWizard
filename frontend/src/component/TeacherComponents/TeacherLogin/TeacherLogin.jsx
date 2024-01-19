@@ -62,7 +62,8 @@ const TeacherLogin = () => {
           token: response.data.token,
           email: response.data.email,
           userName: response.data.userName,
-          role: response.data.role
+          role: response.data.role,
+          userId: response.data._id
         })
       );
        navigate('/teacher/Dashboard');

@@ -7,12 +7,18 @@ import Course from '../Pages/StudentPages/Course'
 import AboutUs from '../Pages/StudentPages/AboutUs'
 import Blog from '../Pages/StudentPages/Blog'
 import Profile from '../Pages/StudentPages/Profile'
-import UserProctiveRoutes from '../ProtectiveRoutes/UserProctiveRoutes'
+import {UserProtectedRoutes,UserProtectedRoute} from '../ProtectiveRoutes/UserProctiveRoutes'
 import Forgot from '../Pages/StudentPages/ForgetPassWord'
 import Otp from'../Pages/StudentPages/Otp'
 import Teset from '../Pages/StudentPages/teset'
 import AdminProctiveRoutes from '../ProtectiveRoutes/AdminProtectiveRoutes'
 import CourseDetails from '../Pages/StudentPages/CourseDetails'
+import MyEntrollment from '../Pages/StudentPages/MyEntrollment'
+
+import Chapters from '../Pages/StudentPages/Chapters'
+import Chat from '../Pages/StudentPages/Chat'
+import BlogDetail from '../Pages/StudentPages/BlogDetails'
+import MyBlog from '../Pages/StudentPages/MyBlogs'
 
 
 function UserRoutes() {
@@ -21,20 +27,44 @@ function UserRoutes() {
      
         <Route path= '/' element ={<Home/>} />
         <Route path= '/login' element ={
-          <UserProctiveRoutes>
+          <UserProtectedRoutes>
          <Login/>
-        </UserProctiveRoutes>} />
+        </UserProtectedRoutes>} />
        
         <Route path= '/register' element ={
-          <UserProctiveRoutes>
+          <UserProtectedRoutes>
         <Signup/>
-        </UserProctiveRoutes>} />
+        </UserProtectedRoutes>} />
         <Route exact path= '/courses' element = {<Course/>}></Route>   
         <Route path='/aboutUs' element ={<AboutUs/>}></Route>  
         <Route path='/blogs' element={<Blog/>}></Route>
-        <Route path='/profile' element={<Profile/>}></Route>
+        <Route exact path="/blogDetails" element={<BlogDetail/>} />
+        <Route exact path="/myBlogs" element={
+         <UserProtectedRoute>
+        <MyBlog/>
+        </UserProtectedRoute>
+        } />
+        <Route path='/profile' element={
+         <UserProtectedRoute>
+        <Profile/>
+        </UserProtectedRoute>
+        }></Route>
         <Route path='/forgotPassword' element={<Forgot/>}></Route>
         <Route exact path="/courses/:id" element={<CourseDetails/>} />
+        <Route exact path="/myEntrollments" element={
+        <UserProtectedRoute>
+        <MyEntrollment/>
+        </UserProtectedRoute>
+        } />
+        <Route exact path="/myEntrollments/chapters" element={
+        <UserProtectedRoute>
+        <Chapters/>
+        </UserProtectedRoute>} />
+        <Route exact path="/chats" element={
+        <UserProtectedRoute>
+        <Chat/>
+        </UserProtectedRoute>
+        } />
         {/* <Route path='/forgotPassword/Otp' element={<Otp/>}></Route>
         <Route path= '/test' element={<Teset/>}></Route> */}
 

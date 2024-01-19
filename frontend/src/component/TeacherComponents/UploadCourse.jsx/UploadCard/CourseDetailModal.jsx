@@ -132,7 +132,7 @@ const CourseModal = ({ formData, onClose,setCourseDetails }) => {
       formDataToSend.append('coverPhoto', editedData.coverPhoto);
       formDataToSend.append('demoVideo', editedData.demoVideo);
      
-      const response = await teacherAxiosInstance.post('edititCourseDetails', formDataToSend);
+      const response = await teacherAxiosInstance.put(`edititCourseDetails/${ editedData._id}`, formDataToSend);
   console.log(response.data);
       if (response.data.error) {
         toast.error(response.data.message);

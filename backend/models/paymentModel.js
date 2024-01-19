@@ -23,7 +23,15 @@ const paymentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User', 
     required: true
-  }
+  }, 
+  isTeacherPay:{
+    type:Boolean,
+    default:false,
+   },
+  created: {
+    type: Date,
+    default: Date.now(),
+}
 });
 
 const Payment = mongoose.model('Payment', paymentSchema);

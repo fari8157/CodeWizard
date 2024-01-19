@@ -33,7 +33,7 @@ function ChangePasswordModal({ isOpen, onRequestClose }) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordsMatch, setPasswordsMatch] = useState(true);
-   const {email}=useSelector((state)=>state.Client)
+   const {email,userId}=useSelector((state)=>state.Client)
    const navigate=useNavigate()
   const handleVerify = async () => {
     try {

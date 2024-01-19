@@ -4,7 +4,7 @@ import DashHome from '../../component/TeacherComponents/Dashbord/DashHome'
 
 function Dashboard() {
   return (
-    <div >
+    <div className=' overflow-x-hidden'>
       <Navbar/>
      <DashHome/>
     </div>

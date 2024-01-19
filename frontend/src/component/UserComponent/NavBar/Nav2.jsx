@@ -75,7 +75,11 @@ function Navbar() {
               Blogs
             </span>
           </Link>
-         
+          <Link to="/chats">
+            <span className="text-blue-400 dark:text-blue-600 hover:text-gray-300 dark:hover:text-red-200 font-semibold link-underline link-underline-normal dark:link-underline-dark">
+              chats
+            </span>
+          </Link>
             <span    onClick={handleProfileClick} className="text-blue-400 dark:text-blue-600 hover:text-gray-300 dark:hover:text-red-200 font-semibold link-underline link-underline-normal dark:link-underline-dark">
               Profile
             </span>
@@ -83,9 +87,9 @@ function Navbar() {
         </div>
         <div className="flex gap-3">
           <div className="space-x-4 flex items-center text-blue-600 dark:text-blue-400">
-            <button onClick={handleThemeToggle}>
+            {/* <button onClick={handleThemeToggle}>
               {isDarkMode ? <FiSun size={24} /> : <FiMoon size={24} />}
-            </button>
+            </button> */}
             <>
           {!Token &&
               <button

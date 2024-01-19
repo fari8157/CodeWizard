@@ -1,35 +1,95 @@
-import React, { useState } from 'react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-
-const AddCategory = ({ closeModal }) => {
-  const [categoryName, setCategoryName] = useState('');
+import React, { useState } from "react";
+import Dropzone from "react-dropzone";
+import toast, { Toaster } from "react-hot-toast";
+import useAxiosPrivate from "../../../hook/useAxiosPrivate";
+import { Dna } from "react-loader-spinner";
+import PropTypes from "prop-types";
+const AddCategory = ({ closeModal, setFetch }) => {
+  const { adminAxiosInstance } = useAxiosPrivate();
+  const [categoryName, setCategoryName] = useState("");
   const [image, setImage] = useState(null);
-
-  const handleDragEnd = (result) => {
-    // TODO: Implement logic to handle reordering after drag and drop
-    // Example: Update state based on the reordered items
-  };
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
     setCategoryName(e.target.value);
   };
 
-  const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
+  const handleEditImageDrop = (acceptedFiles) => {
+    const file = acceptedFiles[0];
+
+    if (file && file.type.startsWith("image/")) {
+      setImage(acceptedFiles[0]);
+    } else {
+      toast.error("Please upload a valid image file.");
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-   
-    setCategoryName('');
-    setImage(null);
+    setLoading(true);
+
+    try {
+      const categoryData = { name: categoryName, image };
+      const response = await adminAxiosInstance.post(
+        "/createCategory",
+        categoryData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.data.error) {
+        toast.error(response.data.message);
+      } else {
+        toast.success(response.data.message, {
+          style: {
+            borderRadius: "10px",
+            background: "#00FF00",
+            color: "#FFFFFF",
+            padding: "16px",
+            minWidth: "300px",
+            textAlign: "center",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+            position: "center", // Center the toast
+          },
+        });
+        setFetch(true);
+      }
+
+      setCategoryName("");
+      setImage(null);
+    } catch (error) {
+      console.error("Error occurred:", error);
+      toast.error("An error occurred while submitting the form");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-8 rounded-lg w-96">
+       <Toaster />
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <Dna
+            visible={true}
+            height="80"
+            width="80"
+            ariaLabel="dna-loading"
+            wrapperStyle={{}}
+            wrapperClass="dna-wrapper"
+          />
+        </div>
+      )}
+      <div className="bg-white p-8 rounded-lg w-auto">
+      
         {/* Close button */}
-        <span className="float-right text-gray-600 cursor-pointer" onClick={closeModal}>
+        <span
+          className="float-right text-gray-600 cursor-pointer"
+          onClick={closeModal}
+        >
           &times;
         </span>
 
@@ -40,7 +100,9 @@ const AddCategory = ({ closeModal }) => {
         <form onSubmit={handleSubmit}>
           {/* Category Name */}
           <div className="mb-4">
-            <label className="block text-sm font-semibold mb-1">Category Name</label>
+            <label className="block text-sm font-semibold mb-1">
+              Category Name
+            </label>
             <input
               type="text"
               value={categoryName}
@@ -51,39 +113,57 @@ const AddCategory = ({ closeModal }) => {
           </div>
 
           {/* Image Upload */}
-          <div className="mb-4">
-            <label className="block text-sm font-semibold mb-1">Upload Image</label>
-            <input
-              type="file"
-              onChange={handleImageChange}
-              className="p-2 border rounded-md w-full"
-              required
-            />
-          </div>
+          <Dropzone
+            accept={["image/*"]}
+            multiple={false}
+            onDrop={handleEditImageDrop}
+          >
+            {({ getRootProps, getInputProps }) => (
+              <section>
+                <div
+                  className="w-full h-40 border-2 border-gray-400 border-dashed flex items-center justify-center cursor-pointer"
+                  {...getRootProps()}
+                >
+                  <input {...getInputProps()} />
+                  <div className="flex flex-col h-full justify-center">
+                    {image ? (
+                      <div className="h-1/3 flex items-center justify-center">
+                        {image.name}
+                      </div>
+                    ) : (
+                      <p>Drag 'n' drop image here, or click to select image</p>
+                    )}
+                    {image && (
+                      <img
+                        className="w-full h-2/3 object-center pb-4"
+                        src={URL.createObjectURL(image)}
+                      ></img>
+                    )}
+                  </div>
+                </div>
+              </section>
+            )}
+          </Dropzone>
 
           {/* Submit Button */}
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Add Category
-          </button>
+          <div className=" flex justify-center p-3">
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Add Category
+            </button>
+          </div>
         </form>
 
         {/* Drag and Drop Section */}
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="categories">
-            {(provided) => (
-              <div {...provided.droppableProps} ref={provided.innerRef}>
-                {/* Placeholder for draggable content */}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
       </div>
+       
     </div>
   );
 };
-
+AddCategory.propTypes = {
+  closeModal: PropTypes.func.isRequired,
+  setFetch: PropTypes.func.isRequired,
+};
 export default AddCategory;

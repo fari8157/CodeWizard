@@ -6,14 +6,26 @@ const connectDB = require('./config/db')
 const userRouter = require( "./routes/userRoutes")
 const adminRouter=require('./routes/adminRoutes')
 const teacherRouter=require('./routes/teacherRoutes')
+const chatRouter=require('./routes/chatRoutes')
 const cookieParser = require('cookie-parser');
 const Cloudinary = require('./config/cloudinery');
 const fileupload=require("express-fileupload")
+const {createServer}=require('http')
+const{Server}=require('socket.io')
+const configureSocket=require('./config/socket')
 
 dotenv.config();
 const app=express()
-
-
+const server=createServer(app)
+const io = new Server(server,{
+  transports: ["websocket", "polling"],
+  cors: {
+    origin: ["http://localhost:5173"],
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+configureSocket(io)
 
 
 connectDB()
@@ -29,13 +41,9 @@ app.use(cors(corsOption));
 app.use("/",userRouter)
 app.use("/admin",adminRouter)
 app.use('/teacher',teacherRouter)
-// app.use(express.static('public'))
-
+app.use('/chat',chatRouter)
 app.get("/",(req,res)=>{
     res.send("Api is running")
 })
-
-
-
 const PORT = process.env.PORT;
-app.listen(PORT,console.log(`server started on ${PORT}`))
+server.listen(PORT,console.log(`server started on ${PORT}`))

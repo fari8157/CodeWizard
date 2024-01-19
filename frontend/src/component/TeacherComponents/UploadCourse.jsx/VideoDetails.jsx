@@ -56,18 +56,20 @@ const CourseVideos = ({ formData, chapters, handleDeleteVideo, handleClose }) =>
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("df2swefw3dffh");
+    return;
     try {
-      Swal.fire({
-        title: 'Saving Chapter Details',
-        text: 'Please wait...',
-        icon: 'info',
-        allowOutsideClick: false,
-        showConfirmButton: false,
-        showCancelButton: false,
-        willOpen: () => {
-          Swal.showLoading();
-        }
-      });
+      // Swal.fire({
+      //   title: 'Saving Chapter Details',
+      //   text: 'Please wait...',
+      //   icon: 'info',
+      //   allowOutsideClick: false,
+      //   showConfirmButton: false,
+      //   showCancelButton: false,
+      //   willOpen: () => {
+      //     Swal.showLoading();
+      //   }
+      // });
 
       const formData = new FormData();
       formData.append('chapterIndex', chapterIndex);
@@ -79,17 +81,17 @@ const CourseVideos = ({ formData, chapters, handleDeleteVideo, handleClose }) =>
       const response = await teacherAxiosInstance.post('uploadChapters', formData);
 
       if (response.data.error) {
-        Swal.close();
+        // Swal.close();
         toast.error(response.data.message);
       } else {
-        Swal.close();
+        // Swal.close();
         toast.success(response.data.message);
       }
 
       handleCloseChapterModal();
     } catch (error) {
       console.error(error);
-      Swal.close();
+      // Swal.close();
       toast.error('Error submitting data');
     }
   };

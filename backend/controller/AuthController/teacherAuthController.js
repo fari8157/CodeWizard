@@ -1,6 +1,6 @@
 const { generateToken } = require("../../middleWare/auth.js");
-const TeacherModel =require('../../repository/teacherModel')
-const OTPRepository =require("../../repository/otpModel")
+const TeacherModel =require('../../repository/teacherRepository.js')
+const OTPRepository =require("../../repository/otpRepository.js")
 const { generateOTP}= require('../../utils/otp.js')
 const {sendOTP} = require('../../utils/sendEmail.js')
 const { imageUpload } = require('../../utils/cloudinery/upload.js')
@@ -16,10 +16,6 @@ const { imageUpload } = require('../../utils/cloudinery/upload.js')
     console.log(err.message);
   }
 };
-
-
-
-
 
 const teacherRegister = async (req, res) => {
   try {
@@ -55,7 +51,7 @@ const teacherRegister = async (req, res) => {
 };
 
 
-const forgetPassword = async (req, res) => {
+const forgotPassword = async (req, res) => {
   try {
     console.log('hi');
     const { email } = req.body;
@@ -123,7 +119,7 @@ const otpVerify = async (req, res) => {
 
 
 
-const resedOtp = async (req, res) => {
+const resetOtp = async (req, res) => {
   try {
     const { email } = req.body;
     console.log(email);
@@ -223,9 +219,9 @@ const teacherLogin = async (req, res) => {
 
   module.exports={
     teacherRegister,
-    forgetPassword,
+    forgotPassword,
     otpVerify,
-    resedOtp,
+    resetOtp,
     updatePassword,
     teacherLogin,
   }

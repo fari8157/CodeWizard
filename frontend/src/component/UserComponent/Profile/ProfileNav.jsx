@@ -76,13 +76,16 @@ import userAxios from "../../../Axiox/UserAxiox";
 import EditDetailsModal from "../../Modal/updateDetails";
 import Swal from "sweetalert2";
 import useAxiosPrivate from "../../../hook/useAxiosPrivate";
+import { Link } from "react-router-dom";
+import TransactionTable from "../TransactionTable/Table";
 
 const ProfileCard = () => {
   const {userAxiosInstance} = useAxiosPrivate()
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setEditModal] = useState(false);
   const [userData, setUserData] = useState("");
-  const { Token, role } = useSelector((state) => state.Client);
+  const [transaction,setTransaction]=useState([])
+  const { Token, role,userId } = useSelector((state) => state.Client);
   useEffect(() => {
     console.log(Token, role);
     if (Token && role) {
@@ -90,6 +93,10 @@ const ProfileCard = () => {
         .get("/profileDetail")
         .then((response) => {
           setUserData(response.data.userData);
+          if(response.data.payments){
+          setTransaction(response.data.payments)
+          }
+          
         })
         .catch((error) => {
           console.error("Error fetching profile details:", error);
@@ -146,7 +153,7 @@ const ProfileCard = () => {
       formData.append("profilePicture", selectedFile);
 
       userAxios
-        .post("/updateProfilePic", formData, {
+        .put(`/updateProfilePic/${userId}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: Token,
@@ -209,7 +216,7 @@ const ProfileCard = () => {
               </div>
 
               <h1 className="text-3xl font-bold pt-8 lg:pt-0">
-                {userData.fullName}
+                {userData?.fullName}
               </h1>
 
               <div className="mx-auto lg:mx-0 w-4/5 pt-3 border-b-2 border-green-500 opacity-25"></div>
@@ -221,7 +228,7 @@ const ProfileCard = () => {
                 >
                   <path d="M21,4H3A2,2 0 0,0 1,6V18A2,2 0 0,0 3,20H21A2,2 0 0,0 23,18V6A2,2 0 0,0 21,4M21,6L12,11L3,6H21M3,18V8L12,13L21,8V18H3Z" />
                 </svg>
-                {userData.email}
+                {userData?.email}
               </p>
 
               <p className="pt-2 text-gray-600 text-xs lg:text-sm flex items-center justify-center lg:justify-start">
@@ -232,7 +239,7 @@ const ProfileCard = () => {
                 >
                   <path d="M12,2C6.48,2,2,6.48,2,12c0,5.52,4.48,10,10,10s10-4.48,10-10C22,6.48,17.52,2,12,2z M12,14c-2.67,0-5.33-1.33-8-4c0,2.67,2.67,4,8,4c5.33,0,8-1.33,8-4C17.33,12.67,14.67,14,12,14z" />
                 </svg>
-                Username: {userData.userName}
+                Username: {userData?.userName}
               </p>
               <p className="pt-2 text-gray-600 text-xs lg:text-sm flex items-center justify-center lg:justify-start">
                 <svg
@@ -242,7 +249,7 @@ const ProfileCard = () => {
                 >
                   <path d="M12,2C6.48,2,2,6.48,2,12c0,5.52,4.48,10,10,10s10-4.48,10-10C22,6.48,17.52,2,12,2z M12,14c-2.67,0-5.33-1.33-8-4c0,2.67,2.67,4,8,4c5.33,0,8-1.33,8-4C17.33,12.67,14.67,14,12,14z" />
                 </svg>
-                Phone: {userData.phoneNumber}
+                Phone: {userData?.phoneNumber}
               </p>
 
               <ChangePasswordModal
@@ -270,7 +277,9 @@ const ProfileCard = () => {
                 </button>
               </div>
               <div className="flex justify-between">
+                <Link to='/myEntrollments'>
                 <p className="font-semibold">My-Courses</p>
+                </Link>
                 <span>My-Blogs</span>
               </div>
             </div>
@@ -292,11 +301,15 @@ const ProfileCard = () => {
 
             <img
               src={userData && userData.pic.url}
-              className="rounded-none lg:rounded-lg shadow-2xl hidden lg:block"
+              className="rounded-none lg:rounded-lg shadow-2xl hidden lg:block  max-h-80 w-full   "
               alt="Profile"
             />
           </div>
         </div>
+        {transaction&&
+        
+      <TransactionTable transaction={transaction}/>
+        }
       </div>
     </>
   );

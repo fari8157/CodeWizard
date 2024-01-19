@@ -31,6 +31,11 @@ const Signup = () => {
       [e.target.name]: e.target.value
     });
   };
+  const isStrongPassword = (password) => {
+    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return strongPasswordRegex.test(password);
+  };
+
 
   const isEmailValid = (email) => {
    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -71,7 +76,10 @@ const Signup = () => {
       toast.error(errorMessage);
       return;
     }
-    
+    if (!isStrongPassword(formData.password)) {
+      alert('Please enter a strong password. It should contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.');
+      return;
+    }
 
     if (formData.password !== formData.rePassword) {
       toast.error('Passwords do not match');
@@ -223,6 +231,11 @@ const Signup = () => {
                 />
               )}
             </div>
+            {formData.password.length > 0 && (
+                  <p className="text-red-500 mt-2">
+                    Please enter a strong password. It should contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.
+                  </p>
+                )}
             <button className="bg-[#002D74] mt-3 rounded-lg text-white py-3 hover:scale-105 duration-300 dark:bg-blue-400">
               Register
             </button>

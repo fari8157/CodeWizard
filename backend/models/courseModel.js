@@ -47,10 +47,16 @@ const courseSchema=new mongoose.Schema({
         type:Boolean,
         default:false,
       },
+      reviews: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "CourseReview",
+        },
+      ],
       created: {
         type: Date,
         default: Date.now(),
     }
 })
 
-module.exports = mongoose.model("course", courseSchema);
+module.exports = mongoose.model("Course", courseSchema);

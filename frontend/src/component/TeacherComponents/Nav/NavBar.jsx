@@ -24,7 +24,7 @@ const Navbar = () => {
 
   return (
     <>
-    <nav className="navbar fixed w-full z-40">
+    <nav className="navbar fixed w-full z-40 ">
       <div className="container mx-auto flex justify-between items-center py-4">
         <div className="logo w-16 md:w-20">
           <img src="" alt="" />
@@ -40,22 +40,26 @@ const Navbar = () => {
             UPLOAD CLASS
           </span>
           </Link>
-          
+          <Link to="/teacher/courses">
           <span className="nav-link">
             MY COURSES
           </span>
-        
+          </Link>
+          <Link to="/teacher/chat">
           <span className="nav-link">
             CHATS
           </span>
+          </Link>
           <Link to='/teacher/profile'>
           <span className="nav-link">
             PROFILE
           </span>
           </Link>
+          <Link to='/teacher/payments'>
           <span className="nav-link">
             TRANSACTIONS
           </span>
+          </Link>
           
         </div>
         <div className="md:hidden" onClick={toggleMobileMenu}>

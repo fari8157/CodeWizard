@@ -24,15 +24,17 @@ const Navbar = () => {
 
   return (
     <>
-    <nav className="navbar fixed w-full">
+    <nav className="navbar fixed w-full z-40">
       <div className="container mx-auto flex justify-between items-center py-4">
         <div className="logo w-16 md:w-20">
           <img src="" alt="" />
         </div>
         <div className="hidden md:flex space-x-8">
+        <Link to='/admin/dashbord'>
           <span className="nav-link">
             DASHBOARD
           </span>
+          </Link>
           <Link to='/admin/students'>
           <span  className="nav-link">
             STUDENTS
@@ -57,12 +59,14 @@ const Navbar = () => {
           <span className="nav-link">
             ALL COURSE
           </span>
-          <span className="nav-link">
+          {/* <span className="nav-link">
             REPORTED COURSE
-          </span>
+          </span> */}
+          <Link to='/admin/transaction'>
           <span className="nav-link">
             TRANSACTION
           </span>
+          </Link>
         </div>
         <div className="md:hidden" onClick={toggleMobileMenu}>
         <Hamburger />

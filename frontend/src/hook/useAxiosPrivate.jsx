@@ -24,6 +24,7 @@ const useAxiosPrivate = () =>{
             config => {
                 if(!config.headers['Authorization']){
                     config.headers['Authorization'] = authState.Token
+                    config.headers['userRole'] = authState.role
                 }
 
                 return config;
@@ -34,6 +35,7 @@ const useAxiosPrivate = () =>{
             config => {
                 if(!config.headers['Authorization']){
                     config.headers['Authorization'] = authState.Token
+                    config.headers['userRole'] = authState.role
                 }
 
                 return config;

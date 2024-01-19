@@ -25,7 +25,7 @@ function EditDetailsModal({ isOpen, onRequestClose, userData, setUserData}) {
   const [fullName, setFullName] = useState('');
   const [username, setUsername] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const {Token,role}=useSelector((state)=>state.Client)
+  const {Token,role,userId}=useSelector((state)=>state.Client)
   useEffect(() => {
     // Initialize state based on userData when it changes
     setFullName(userData.fullName || '');
@@ -46,7 +46,7 @@ function EditDetailsModal({ isOpen, onRequestClose, userData, setUserData}) {
       fullName,username,phoneNumber
     }
     console.log('Updating details:', editDetails ,);
-    userAxiosInstance.post('/editProfileDetail',editDetails, {
+    userAxiosInstance.put(`/editProfileDetail/${userId}`,editDetails, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': Token,

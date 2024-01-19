@@ -1,6 +1,6 @@
 const { generateToken } = require("../../middleWare/auth.js");
-const UserModel = require("../../repository/userModel.js");
-const OTPRepository =require("../../repository/otpModel.js")
+const UserModel = require("../../repository/userRepository.js");
+const OTPRepository =require("../../repository/otpRepository.js")
 const { generateOTP}= require('../../utils/otp.js')
 const {sendOTP} = require('../../utils/sendEmail.js')
 const bcrypt = require ('bcrypt')
@@ -176,7 +176,7 @@ const otpVerify=async (req,res)=>{
 }
 };
 
-const resedOtp= async (req,res)=>{
+const resetOtp= async (req,res)=>{
   try{
   const {email}= req.body
   console.log(email);
@@ -280,7 +280,7 @@ module.exports = {
   googleLogin,
   forgetPassword,
   otpVerify,
-  resedOtp,
+  resetOtp,
   updatePassword,
   verifyPass,
   

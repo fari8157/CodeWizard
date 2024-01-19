@@ -13,6 +13,7 @@ const Signup = () => {
   const navigate=useNavigate()
   const [isPassShow, setPassShow] = useState(false);
   const [loading,setLoading]=useState(false)
+  const [isPasswordStrong, setIsPasswordStrong] = useState(true);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -26,13 +27,18 @@ const Signup = () => {
     qualificationCertificate: null,
   });
 
+  
   const handleChangeForm = (e) => {
+  
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
   };
-
+  const isStrongPassword = (password) => {
+    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return strongPasswordRegex.test(password);
+  };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -42,6 +48,7 @@ const Signup = () => {
       e.target.value = '';
       return;
     }
+   
 
     // Check the name attribute to update the correct field in formData
     if (e.target.name === 'idProof') {
@@ -63,7 +70,10 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+    if (!isStrongPassword(formData.password)) {
+      toast.error('Please enter a strong password. It should contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.');
+      return;
+    }
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(formData.email)) {
       alert('Please enter a valid email address');
@@ -271,8 +281,13 @@ const Signup = () => {
                     className="absolute top-1/2 right-4 -translate-y-1/2 cursor-pointer w-6 h-6 text-gray-500 hover:text-gray-800"
                   />
                 )}
+              
               </div>
-             
+              {formData.password.length > 0 && (
+                  <p className="text-red-500 mt-2">
+                    Please enter a strong password. It should contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character.
+                  </p>
+                )}
               <div className="p-3 rounded-lg border flex flex-col sm:flex-row sm:items-center">
                   <input
                     className='border-none text-sm text-slate-500

@@ -4,7 +4,7 @@ import UploadClass from '../../component/TeacherComponents/UploadCourse.jsx/uplo
 
 function UploadClasses() {
   return (
-    <div  className='h-screen '>
+    <div  className=' '>
      <Navbar/>
      <UploadClass/>
     </div>
