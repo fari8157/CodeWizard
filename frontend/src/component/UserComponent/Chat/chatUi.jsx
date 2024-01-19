@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import io from "socket.io-client";
 import { Button } from "@material-tailwind/react";
 import useAxiosPrivate from "../../../hook/useAxiosPrivate";
-const socket = io("http://localhost:5000");
+const socket = io("https://codewizard.salmanulfaris.shop");
 
 const ChatUi = ({ recipientId, recipient }) => {
   const {userAxiosInstance} = useAxiosPrivate();
