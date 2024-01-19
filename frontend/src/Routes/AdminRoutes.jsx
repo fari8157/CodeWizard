@@ -14,7 +14,7 @@ import TeacherDetails from '../Pages/AdminPages/TeacherDetails'
 function AdminRoutes() {
     return (
         <Routes>
-            <Route path='/dashbord' element={
+            <Route path='/dashboard' element={
                 <AdminProctiveRoutes>
 
                     <Dashboard />

@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import { useLocation, Navigate } from 'react-router-dom';
 
-function TeacherProtective() {
+function TeacherProtective({ children }) {
     const { Token,role } = useSelector((state) => state.Client);
     const location = useLocation();
   return (

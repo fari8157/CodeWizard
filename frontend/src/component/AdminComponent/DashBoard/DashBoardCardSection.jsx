@@ -22,6 +22,7 @@ const DashboardCardSection = () => {
     const fetchData = async () => {
       try {
         const response = await adminAxiosInstance.get('/dashCard');
+        console.log('hiiii');
         setStudent(response.data.totalStudents)
         setTotalCourse(response.data.totalCourses)
         setTeachers(response.data.totalTeacher)

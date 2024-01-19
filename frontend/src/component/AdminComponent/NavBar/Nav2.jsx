@@ -30,7 +30,7 @@ const Navbar = () => {
           <img src="" alt="" />
         </div>
         <div className="hidden md:flex space-x-8">
-        <Link to='/admin/dashbord'>
+        <Link to='/admin/dashboard'>
           <span className="nav-link">
             DASHBOARD
           </span>

@@ -23,7 +23,7 @@ const Header = () => {
             <button className="bg-blue-900 text-white rounded-full px-6 py-4 mt-6 font-bold hover:bg-white hover:text-blue-900">Start Learning</button>
           </div>
           <div className={`w-1/2 header-image ${animationComplete ? 'slide-in-right' : ''}`}>
-            <img src="public/banner.png" alt="E-Learning Platform Image" />
+            <img src="/banner.png" alt="E-Learning Platform Image" />
           </div>
         </div>
       </div>

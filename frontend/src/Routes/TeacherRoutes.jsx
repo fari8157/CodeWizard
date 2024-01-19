@@ -51,29 +51,12 @@ function TeacherRoutes() {
    </TeacherProtective>
    }></Route>
    <Route path='/courses' element={
-   <TeacherProtective>
-   <RunnigClass/>
-   </TeacherProtective>
-   }></Route>
-   <Route exact path="/chapters/:courseId" element={
-   <TeacherProtective>
-   <ChapterShowing/>
-   </TeacherProtective>} />
-   <Route path='/payments' element={
-   <TeacherProtective>
-   <Payment/>
-   </TeacherProtective>
-   }></Route>
-   <Route path='/chapterDetails' element={
-   <TeacherProtective>
-   <ChapterDetails/>
-   </TeacherProtective>
-   }></Route>
-   <Route path='/chat' element={
-   <TeacherProtective>
-   <Chat/>
-   </TeacherProtective>
-   }></Route>
+   
+   <RunnigClass/>}></Route>
+   <Route exact path="/chapters/:courseId" element={<ChapterShowing/>} />
+   <Route path='/payments' element={<Payment/>}></Route>
+   <Route path='/chapterDetails' element={<ChapterDetails/>}></Route>
+   <Route path='/chat' element={<Chat/>}></Route>
 
 
    

@@ -46,6 +46,17 @@ function Navbar() {
       });
     }
   };
+  const handleChatClick = () => {
+    if (Token) {
+      navigate('/chats');
+    } else {
+      Swal.fire({
+        title: 'Please log in',
+        icon: 'error',
+      });
+    }
+  };
+
   return (
     <>
     <nav  className=" fixed flex justify-between dark:bg-gray-900 bg-gray-100 p-4 shadow-lg z-50 border-b w-full">
@@ -65,21 +76,21 @@ function Navbar() {
               Course
             </span>
           </Link>
-          <Link to="/aboutUs">
+          {/* <Link to="/aboutUs">
             <span className="text-blue-400 dark:text-blue-600 hover:text-gray-300 dark:hover:text-red-200 font-semibold link-underline link-underline-normal dark:link-underline-dark">
               About Us
             </span>
-          </Link>
+          </Link> */}
           <Link to="/blogs">
             <span className="text-blue-400 dark:text-blue-600 hover:text-gray-300 dark:hover:text-red-200 font-semibold link-underline link-underline-normal dark:link-underline-dark">
               Blogs
             </span>
           </Link>
-          <Link to="/chats">
-            <span className="text-blue-400 dark:text-blue-600 hover:text-gray-300 dark:hover:text-red-200 font-semibold link-underline link-underline-normal dark:link-underline-dark">
+         
+            <span onClick={ handleChatClick} className="text-blue-400 dark:text-blue-600 hover:text-gray-300 dark:hover:text-red-200 font-semibold link-underline link-underline-normal dark:link-underline-dark">
               chats
             </span>
-          </Link>
+          
             <span    onClick={handleProfileClick} className="text-blue-400 dark:text-blue-600 hover:text-gray-300 dark:hover:text-red-200 font-semibold link-underline link-underline-normal dark:link-underline-dark">
               Profile
             </span>

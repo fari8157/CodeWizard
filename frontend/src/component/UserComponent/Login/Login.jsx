@@ -98,10 +98,10 @@ const Login = () => {
 const loginHandle = async (event) => {
   event.preventDefault();
   setLoading(true);
-
+  
   try {
-    const response = await userAxios.post('/login', formData);
-
+    const response = await userAxios.post('login', formData);
+      console.log(response);
     if (response.data.error) {
       toast.error(response.data.message);
       setLoading(false);
@@ -152,7 +152,7 @@ const loginHandle = async (event) => {
  <div className="max-w-6xl flex flex-col md:flex-row">
    <div className="w-full md:w-1/2 p-8 md:p-16 hidden md:block">
      <ToastContainer />
-     <img className="w-full h-auto" src="public/logo2.png" alt="Login Icon" />
+     <img className="w-full h-auto" src="/logo2.png" alt="Login Icon" />
      <p className="text-lg text-[#002D74] dark:text-blue-400 mt-4 font-bold text-center">
        Learn To Code Like Magic
      </p>
