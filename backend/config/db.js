@@ -3,14 +3,14 @@ const mongoose =require('mongoose')
 const connectDB= async ()=>{
     try {
         const conn =await mongoose.connect(process.env.MONGO_URL,{
-            useUnifiedTopology: true,
-            useNewUrlParser: true,
+            // useUnifiedTopology: true,
+            // useNewUrlParser: true,
            
         });
         console.log(`mongoDb connected ${conn.connection.host}`)
     } catch (error) {
         console.error(error);
-        process.exit()
+        process.exit(1)
     }
 }
 
