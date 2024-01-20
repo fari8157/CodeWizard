@@ -8,8 +8,8 @@ const connectDB = (req, res) => {
     .then(() => {
       console.log("connected to mongoDB");
     })
-    .catch(() => {
-      console.log("Error connecting to mongoDB");
+    .catch((error) => {
+      console.log("Error connecting to mongoDB", error);
     });
 };
 
