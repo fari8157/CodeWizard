@@ -28,6 +28,7 @@ const io = new Server(server,{
 });
 configureSocket(io)
 
+app.use(cors(corsOption));
 
 connectDB()
 Cloudinary()
@@ -38,7 +39,6 @@ app.use(fileupload({
   }))
 app.use(cookieParser());
 app.use(express.json())
-app.use(cors(corsOption));
 app.use("/",userRouter)
 app.use("/admin",adminRouter)
 app.use('/teacher',teacherRouter)
