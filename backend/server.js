@@ -1,7 +1,7 @@
 const express =require('express');
 const dotenv=require('dotenv');
 const cors = require('cors');
-const corsOption=require('./config/cors')
+const {corsOptions}=require('./config/cors')
 const connectDB = require('./config/db')
 const userRouter = require( "./routes/userRoutes")
 const adminRouter=require('./routes/adminRoutes')
@@ -28,7 +28,7 @@ const io = new Server(server,{
 });
 configureSocket(io)
 
-app.use(cors(corsOption));
+app.use(cors(corsOptions));
 
 connectDB()
 Cloudinary()
