@@ -1,10 +1,17 @@
+const { allowedOrigins } = require("./allowedOrigins");
 
 
 const corsOptions = {
-    origin: 'https://codewizard777.netlify.app', // Allow requests from this origin
-    methods: 'GET,POST,PUT,DELETE',          // Allow these HTTP methods
-    allowedHeaders: 'Content-Type,Authorization,userRole', // Allow this header
+    origin:(origin,callback)=>{
+    if(allowedOrigins.indexOf(origin) !==-1|| !origin){
+        callback(null,true)
+      }else{
+        callback(new Error("not allowed by cors"))
+      }
+    },
+    optionsSuccessStatus: 200,
     credentials: true,
+    origin: true,
   }; 
   
-  module.exports =corsOptions
+  module.exports ={corsOptions}

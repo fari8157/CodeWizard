@@ -98,23 +98,29 @@ const BlogListingPage = () => {
       {/* Blog creation section */}
       <div className="container mx-auto mt-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {blogPosts&&blogPosts.map(post => (
-            <div key={post.id} className="bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:shadow-xl" onClick={() => navigate('/blogDetails', { state: post._id })}>
-              <img src={post.coverImage.url} alt={post.title} className="w-full h-64 object-cover" />
-              <div className="p-4">
-                <h2 className="text-xl font-semibold mb-2">{post.title}</h2>
-                <p className="text-sm text-gray-600 mb-2">{post.date}</p>
-                <div className="flex justify-between">
-                <button className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-md transition duration-300 mr-2" onClick={() => handleDeleteBlog(post._id)}>
-                  Delete
-                </button>
-                <button className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded-md transition duration-300" onClick={() => handleEditBlog(post)}>
-                  Edit
-                </button>
-                </div>
-              </div>
-            </div>
-          ))}
+        {blogPosts.length > 0 ? (
+    blogPosts.map(post => (
+      <div key={post.id} className="bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:shadow-xl" onClick={() => navigate('/blogDetails', { state: post._id })}>
+        <img src={post.coverImage.url} alt={post.title} className="w-full h-64 object-cover" />
+        <div className="p-4">
+          <h2 className="text-xl font-semibold mb-2">{post.title}</h2>
+          <p className="text-sm text-gray-600 mb-2">{post.date}</p>
+          <div className="flex justify-between">
+            <button className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-md transition duration-300 mr-2" onClick={() => handleDeleteBlog(post._id)}>
+              Delete
+            </button>
+            <button className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded-md transition duration-300" onClick={() => handleEditBlog(post)}>
+              Edit
+            </button>
+          </div>
+        </div>
+      </div>
+    ))
+  ) : (
+    <div className="text-center text-gray-600 mt-4">
+      <p>Add your first blog.</p>
+    </div>
+  )}
         </div>
       </div>
       {showModal && (

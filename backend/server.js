@@ -12,7 +12,8 @@ const Cloudinary = require('./config/cloudinery');
 const fileupload=require("express-fileupload")
 const {createServer}=require('http')
 const{Server}=require('socket.io')
-const configureSocket=require('./config/socket')
+const configureSocket=require('./config/socket');
+const { allowedOrigins } = require('./config/allowedOrigins');
 
 dotenv.config();
 const app=express()
@@ -20,7 +21,7 @@ const server=createServer(app)
 const io = new Server(server,{
   transports: ["websocket", "polling"],
   cors: {
-    origin: ["https://codewizard777.netlify.app"],
+    origin: allowedOrigins,
     methods: ["GET", "POST"],
     credentials: true,
   },
