@@ -1,31 +1,16 @@
-// const mongoose =require('mongoose')
+require("dotenv").config();
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", false);
 
-// const connectDB= async ()=>{
-//     try {
-//         const conn =await mongoose.connect(process.env.MONGO_URL,{
-//             // useUnifiedTopology: true,
-//             // useNewUrlParser: true,
-           
-//         });
-//         console.log(`mongoDb connected ${conn.connection.host}`)
-//     } catch (error) {
-//         console.error(error);
-//         process.exit(1)
-//     }
-// }
-const mongoose = require('mongoose');
-
-const connectDB = async () => {
-    try {
-        const conn = await mongoose.connect(process.env.MONGO_URL);
-        console.log(`MongoDB connected: ${conn.connection.host}`);
-    } catch (error) {
-        console.error(error);
-        process.exit(1); // Exit with a non-zero status code to indicate an error
-    }
+const connectDB = (req, res) => {
+  mongoose
+    .connect(process.env.MONGO_URL)
+    .then(() => {
+      console.log("connected to mongoDB");
+    })
+    .catch(() => {
+      console.log("Error connecting to mongoDB");
+    });
 };
 
-
-
-
-module.exports =connectDB
+module.exports = connectDB
