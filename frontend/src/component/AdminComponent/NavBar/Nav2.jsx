@@ -56,9 +56,9 @@ const Navbar = () => {
             CATEGORIES
           </span>
           </Link>
-          <span className="nav-link">
+          {/* <span className="nav-link">
             ALL COURSE
-          </span>
+          </span> */}
           {/* <span className="nav-link">
             REPORTED COURSE
           </span> */}

@@ -147,12 +147,12 @@ const Dashboard = () => {
                   >
                     Action
                   </th>
-                  <th
+                  {/* <th
                     scope="col"
                     className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
                     Details
-                  </th>
+                  </th> */}
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -209,7 +209,7 @@ const Dashboard = () => {
                         {user.isAccess ? "Block" : "Unblock"}
                       </button>
                     </td>
-                    <td className="px-6 py-4 flex justify-center whitespace-nowrap text-center">
+                    {/* <td className="px-6 py-4 flex justify-center whitespace-nowrap text-center">
                       <button
                         type="button"
                         className=" md:flex inline-block rounded-full border border-red-900 text-blue-500 dark:bg-yellow-500 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal hover:text-white dark:text-neutral-800 shadow-[0_4px_9px_-4px_#cbcbcb] transition duration-150 ease-in-out hover:bg-red-900 dark:hover:bg-cyan-700 hover:shadow-[0_8px_9px_-4px_rgba(203,203,203,0.3),0_4px_18px_0_rgba(203,203,203,0.2)] focus:bg-cyan-600 dark:focus-bg-neutral-100 focus:shadow-[0_8px_9px_-4px_rgba(203,203,203,0.3),0_4px_18px_0_rgba(203,203,203,0.2)] focus-outline-none focus-ring-0 active-bg-cyan-700 dark:active-bg-neutral-200 active-shadow-[0_8px_9px_-4px_rgba(203,203,203,0.3),0_4px_18px_0_rgba(203,203,203,0.2)]"
@@ -221,7 +221,7 @@ const Dashboard = () => {
                       >
                         View Details
                       </button>
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
               </tbody>

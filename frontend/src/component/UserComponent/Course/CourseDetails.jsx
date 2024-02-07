@@ -4,7 +4,12 @@ import CourseCard from "./CourseCard";
 import userAxiosInstance from "../../../Axiox/UserAxiox";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import debounce from "lodash.debounce";
+import Swal from "sweetalert2";
+
+
+
 function CourseDetails() {
+ 
   const location = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -87,6 +92,11 @@ function CourseDetails() {
       setShowAlert(true);
     } else if (success === "false") {
       setShowAlert(true);
+      Swal.fire({
+        icon: "error",
+        title: "Payment Cancelled",
+        text: "Unfortunately, your payment has been cancelled.",
+      });
     }
   }, [location.search]);
 

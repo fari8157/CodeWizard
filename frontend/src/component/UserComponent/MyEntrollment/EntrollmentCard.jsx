@@ -11,7 +11,7 @@ function EnrollmentCard({ course }) {
     }
   };
   return (
-    <div className="w-1/4 flex gap-4 p-2 flex-col items-center justify-center">
+    <div className="w-full md:w-1/4 flex gap-4 p-2 flex-col items-center justify-center ">
       <div className="w-full flex flex-col justify-center items-center">
         <div className="h-64 w-full cursor-pointer hvr-grow shadow-lg">
           <div

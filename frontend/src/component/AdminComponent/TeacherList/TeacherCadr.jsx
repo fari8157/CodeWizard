@@ -27,7 +27,7 @@ const TeacherCard = ({ teacher, acessChange }) => {
         </div>
       </div>
       <div className="w-full h-1/3 flex justify-evenly items-center">
-        <Button
+        {/* <Button
           className="bg-profile-color"
           onClick={() =>
             navigate("/admin/teacherDetails", {
@@ -36,7 +36,7 @@ const TeacherCard = ({ teacher, acessChange }) => {
           }
         >
           Profile
-        </Button>
+        </Button> */}
 
         <Button
           className={isAccess ? "text-red-500" : "text-green-500"}

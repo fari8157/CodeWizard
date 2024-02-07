@@ -280,7 +280,9 @@ const ProfileCard = () => {
                 <Link to='/myEntrollments'>
                 <p className="font-semibold">My-Courses</p>
                 </Link>
+                <Link to='/myBlogs'>
                 <span>My-Blogs</span>
+                </Link>
               </div>
             </div>
           </div>

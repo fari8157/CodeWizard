@@ -7,7 +7,7 @@ import MyEntrollments from '../../component/UserComponent/MyEntrollment/MyEntrol
 
 function MyEntrollment() {
   return (
-    <div>
+    <div className='overflow-x-hidden'>
         <Navbar/>
       < MyEntrollments/>
       <Footer/>

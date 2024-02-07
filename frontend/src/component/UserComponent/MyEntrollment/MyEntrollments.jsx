@@ -25,7 +25,7 @@ function MyEntrollments() {
   
 
   return (
-    <div className="w-screen h-screen flex gap-2 ">
+    <div className="w-screen h-screen flex flex-col md:flex-row gap-2">
       {courses.map((enrollment) => (
         <EnrollmentCard
           key={enrollment.id}
