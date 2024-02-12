@@ -103,7 +103,7 @@ function CourseSinglePage() {
             </div>
           </div>
         </div>
-        <div className="hidden sm:block" onClick={toggleVideo}>
+        <div className="hidden sm:hidden md:hidden lg:block" onClick={toggleVideo}>
           <div
             style={{
               backgroundImage: `url(${
@@ -129,7 +129,7 @@ function CourseSinglePage() {
             <video
               controls
               autoPlay
-              className="h-72 w-72 object-cover absolute bottom-8 right-12 lg:h-96 lg:w-96 lg:rounded-br-3xl"
+              className="  h-72 w-72 object-cover absolute bottom-8 right-12 lg:h-96 lg:w-96 lg:rounded-br-3xl "
             >
               <source
                 src={
@@ -148,21 +148,19 @@ function CourseSinglePage() {
       <br />
       <br />
       <div className="flex justify-center lg:hidden">
-      <video
+      {courseDetails?.demoVideo?.url && <video
               controls
               autoPlay
               className="h-72 w-72 object-contain bottom-8 lg:h-96 lg:w-96 lg:rounded-br-3xl"
             >
               <source
                 src={
-                  courseDetails &&
-                  courseDetails.demoVideo &&
-                  courseDetails.demoVideo.url
+                  courseDetails?.demoVideo?.url
                 }
                 type="video/mp4"
               />
               Your browser does not support the video tag.
-            </video>
+            </video>}
             </div>
       <div className="mt-8 text-black p-8 ">
         <h3 className="text-xl font-bold mb-4">Objectives</h3>
